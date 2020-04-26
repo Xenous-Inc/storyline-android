@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">StoryLine</string>
+    <string name="story_title">Title</string>
+    <string name="story_author">Author</string>
+    <string name="story_year">2317</string>
+    <string name="story_time_to_read">Time to read  - 10 min</string>
+</resources>

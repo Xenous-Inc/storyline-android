@@ -1,4 +1,4 @@
-package com.example.storyline
+package com.xenous.storyline
 
 import org.junit.Test
 

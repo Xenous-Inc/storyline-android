@@ -1,4 +1,4 @@
-package com.example.storyline
+package com.xenous.storyline
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

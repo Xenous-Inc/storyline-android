@@ -14,7 +14,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.example.storyline.R
+import com.xenous.storyline.R
 
 
 class StoryLayout(

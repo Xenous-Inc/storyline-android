@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "997102652408",
+    "firebase_url": "https://storyline-32d0d.firebaseio.com",
+    "project_id": "storyline-32d0d",
+    "storage_bucket": "storyline-32d0d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997102652408:android:5beb51eb769f7c39b4640d",
+        "android_client_info": {
+          "package_name": "com.xenous.storyline"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997102652408-at3uo2da3jcnteuv7n27s2sujid0lb8a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xenous.storyline",
+            "certificate_hash": "316ecc6b6255e7467e74384a9666f6b9ec309686"
+          }
+        },
+        {
+          "client_id": "997102652408-32n5l29cbfuvalkjv2cf2ri4q2c8s4ni.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4eVEvo1FOtJMQ3hZJtgx1_in2ayMU37U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997102652408-32n5l29cbfuvalkjv2cf2ri4q2c8s4ni.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "997102652408-j70cuu75g6tk2uuncnt9f8j1qr2utdaa.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.xenous.storyline"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

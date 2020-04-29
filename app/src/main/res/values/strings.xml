@@ -4,4 +4,7 @@
     <string name="story_author">Author</string>
     <string name="story_year">2317</string>
     <string name="story_time_to_read">Time to read  - 10 min</string>
+    <string name="email">E-mail</string>
+    <string name="add_to_quotes">Добавить в цитаты</string>
+    <string name="share">Поделиться</string>
 </resources>

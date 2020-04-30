@@ -82,7 +82,7 @@ class StoryLayout(
                 .moveVerticallyTo(-coverVerticalShift)
         }
 
-        //Fade in with other objects, besides story name
+        //Fade in with other objects, besides story.html name
         run {
             val disappearAnimation = AlphaAnimation(1f, 0f)
             disappearAnimation.duration = 800L

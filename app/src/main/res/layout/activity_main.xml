@@ -7,6 +7,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/authTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/auth"
+        android:textColor="@android:color/white"
+        android:textSize="23sp"
+        android:layout_gravity="end"/>
+
+
 
 </FrameLayout>

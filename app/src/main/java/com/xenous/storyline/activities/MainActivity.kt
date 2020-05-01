@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.Message
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -22,8 +21,6 @@ import com.google.firebase.storage.ktx.storage
 import com.xenous.storyline.R
 import com.xenous.storyline.data.Story
 import com.xenous.storyline.data.User
-import com.xenous.storyline.fragments.StoryFragment
-import com.xenous.storyline.utils.StoryLayout
 
 
 class MainActivity : AppCompatActivity() {
@@ -49,38 +46,40 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        
+        startActivity(Intent(this, LoginActivity::class.java))
 
-        fragmentFrameLayout = findViewById(R.id.fragmentFrameLayout)
-        val storyLayout = StoryLayout
-            .Builder(
-                this,
-                "Хамалеон",
-                "Антон Павлович Чехов",
-                "Читать 5 минут",
-                ""
-            ).build(layoutInflater)
-
-        authentication = FirebaseAuth.getInstance()
-        user = authentication.currentUser
-
-        downloadDataFromDatabaseHandler = object : Handler() {
-            override fun handleMessage(msg: Message) {
-                super.handleMessage(msg)
-
-                val storyFragment = StoryFragment()
-
-                storyLayout.setCoverImageResource(R.drawable.demo_background)
-                storyLayout.cover.setOnClickListener {
-                    storyLayout.collapseStoryCover()
-                }
-                storyLayout.setContentFragment(storyFragment, supportFragmentManager)
-                
-                fragmentFrameLayout.addView(storyLayout.view)
-            }
-        }
-
-        checkUserStatus()
-        makeStatusBarTransparent()
+//        fragmentFrameLayout = findViewById(R.id.fragmentFrameLayout)
+//        val storyLayout = StoryLayout
+//            .Builder(
+//                this,
+//                "Хамелеон",
+//                "Антон Павлович Чехов",
+//                "Читать 5 минут",
+//                ""
+//            ).build(layoutInflater)
+//
+//        authentication = FirebaseAuth.getInstance()
+//        user = authentication.currentUser
+//
+//        downloadDataFromDatabaseHandler = object : Handler() {
+//            override fun handleMessage(msg: Message) {
+//                super.handleMessage(msg)
+//
+//                val storyFragment = StoryFragment()
+//
+//                storyLayout.setCoverImageResource(R.drawable.demo_background)
+//                storyLayout.cover.setOnClickListener {
+//                    storyLayout.collapseStoryCover()
+//                }
+//                storyLayout.setContentFragment(storyFragment, supportFragmentManager)
+//
+//                fragmentFrameLayout.addView(storyLayout.view)
+//            }
+//        }
+//
+//        checkUserStatus()
+//        makeStatusBarTransparent()
     }
 
     override fun onBackPressed() {
@@ -166,7 +165,8 @@ class MainActivity : AppCompatActivity() {
                         }
 
                 }
-                .addOnFailureListener {}
+                .addOnFailureListener {
+                }
 
         }
     }

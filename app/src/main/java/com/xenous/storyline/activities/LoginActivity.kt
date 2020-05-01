@@ -2,7 +2,6 @@ package com.xenous.storyline.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
@@ -34,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_login_new)
 
         auth = FirebaseAuth.getInstance()
         user = auth.currentUser

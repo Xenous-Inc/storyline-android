@@ -183,29 +183,32 @@ class MainActivity : AppCompatActivity() {
                 .addOnSuccessListener { documentDataSnapshot ->
                     todayStory = documentDataSnapshot.toObject<Story>()
 
-                    val reference = Firebase.storage.reference.child(todayStory!!.path_to_text!!)
-
-                    reference.downloadUrl.
-                        addOnSuccessListener {
-                            Log.d(tag, "Book's Url has been downloaded completely")
-                            storyUrl = it.toString()
-
-                            handler.sendMessage(handler.obtainMessage())
-                        }
-                        .addOnFailureListener {
-                            Log.d(tag, "Books downloading has been failed")
-                        }
-
                     db.collection("users").document("test_id")
                         .get()
                         .addOnSuccessListener {
                             userInfo = it.toObject<User>()
+
+                            val reference = Firebase.storage.reference.child(todayStory!!.path_to_text!!)
+
+                            reference.downloadUrl.
+                                addOnSuccessListener { uri ->
+                                    Log.d(tag, "Book's Url has been downloaded completely")
+                                    storyUrl = uri.toString()
+
+                                    handler.sendMessage(handler.obtainMessage())
+                                }
+                                .addOnFailureListener {
+                                    Log.d(tag, "Books downloading has been failed")
+                                }
 
                             Log.d(tag, userInfo.toString())
                         }
                         .addOnCanceledListener {
                             Log.d(tag, "Error")
                         }
+
+
+
                 }
         }
     }

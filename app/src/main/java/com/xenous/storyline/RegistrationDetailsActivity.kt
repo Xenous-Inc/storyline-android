@@ -18,8 +18,8 @@ import java.net.PasswordAuthentication
 class RegistrationDetailsActivity : AppCompatActivity() {
 
     companion object {
-        const val SUCCESS_CODE = 0
-        const val ERROR_CODE = 1
+        const val SUCCESS_CODE = 1
+        const val ERROR_CODE = 0
     }
 
     private lateinit var authentication : FirebaseAuth

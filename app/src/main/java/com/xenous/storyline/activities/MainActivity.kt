@@ -4,14 +4,12 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.x3noku.story.StoryLayout
-import com.x3noku.story.dpToPx
+import com.xenous.storyline.utils.StoryLayout
+import com.xenous.storyline.utils.dpToPx
 import com.xenous.storyline.R
 import com.xenous.storyline.fragments.StoryFragment
 

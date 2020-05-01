@@ -1,4 +1,4 @@
-package com.x3noku.story
+package com.xenous.storyline.utils
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
@@ -14,6 +14,7 @@ import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.xenous.storyline.utils.dpToPx
 import com.xenous.storyline.R
 
 

@@ -1,4 +1,4 @@
-package com.x3noku.story
+package com.xenous.storyline.utils
 
 import android.content.Context
 import android.util.DisplayMetrics

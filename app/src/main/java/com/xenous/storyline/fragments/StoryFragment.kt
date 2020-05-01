@@ -1,4 +1,4 @@
-package com.xenous.storyline
+package com.xenous.storyline.fragments
 
 import android.os.Bundle
 import android.view.ContextMenu
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.xenous.storyline.R
 
 class StoryFragment : Fragment() {
     private lateinit var storyWebView : WebView
@@ -25,9 +26,7 @@ class StoryFragment : Fragment() {
 
         storyWebView = view.findViewById(R.id.storyWebView)
 
-        Toast.makeText(context, "dfdf", Toast.LENGTH_LONG).show()
-
-        val url = "file:///android_asset/text.html"
+        val url = "https://www.york.ac.uk/teaching/cws/wws/webpage1.html"
         storyWebView.loadUrl(url)
 
         registerForContextMenu(storyWebView)

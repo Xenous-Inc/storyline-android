@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.xenous.storyline.LoginActivity">
+        <activity android:name="com.xenous.storyline.activities.LoginActivity">
 
         </activity>
-        <activity android:name="com.xenous.storyline.MainActivity">
+        <activity android:name="com.xenous.storyline.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

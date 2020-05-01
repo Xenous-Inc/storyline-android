@@ -1,19 +1,26 @@
-package com.xenous.storyline
+package com.xenous.storyline.activities
 
 import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.x3noku.story.StoryLayout
+import com.x3noku.story.dpToPx
+import com.xenous.storyline.R
+import com.xenous.storyline.fragments.StoryFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var fragmentFrameLayout : FrameLayout
-
+    companion object {
+        const val TAG = "MainActivity"
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -40,9 +47,9 @@ class MainActivity : AppCompatActivity() {
 
         val storyFragment = StoryFragment()
 
-        fragmentFrameLayout = findViewById(R.id.fragmentFrameLayout)
+        val fragmentFrameLayout = findViewById<FrameLayout>(R.id.fragmentFrameLayout)
 
-        val storyView = StoryLayout
+        val storyLayout = StoryLayout
             .Builder (
                 this,
                 "Хамалеон",
@@ -51,15 +58,22 @@ class MainActivity : AppCompatActivity() {
                 ""
         ).build(layoutInflater)
 
-        storyView.setStoryCoverImageResource(R.drawable.demo_background)
-
-        storyView.storyCoverCardView.setOnClickListener {
-            storyView.collapseStoryCover()
+        with(storyLayout) {
+            setContentFragment(storyFragment, supportFragmentManager)
+            setCoverImageResource(R.drawable.demo_background)
+            cover.setOnClickListener {
+                storyLayout.collapseStoryCover()
+            }
+            collapsedCoverHeight = 80F.dpToPx(this@MainActivity)
+            
+            Thread {
+                while(storyFragment.view == null) { }
+                storyLayout
+                    .hideCoverOnScroll(storyFragment.view!!.findViewById(R.id.storyWebView))
+            }.start()
         }
 
-        storyView.setContentFragment(storyFragment, supportFragmentManager)
-
-        fragmentFrameLayout.addView(storyView.view)
+        fragmentFrameLayout.addView(storyLayout.view)
     }
 
     fun setWindowFlag(activity: Activity, bits: Int, on: Boolean) {

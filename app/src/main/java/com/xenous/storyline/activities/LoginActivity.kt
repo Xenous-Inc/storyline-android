@@ -1,7 +1,8 @@
-package com.xenous.storyline
+package com.xenous.storyline.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.xenous.storyline.R
 
 class LoginActivity : AppCompatActivity() {
 

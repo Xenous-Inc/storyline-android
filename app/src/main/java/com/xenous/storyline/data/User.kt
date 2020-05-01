@@ -1,8 +1,4 @@
-package com.xenous.storyline
-
-import java.lang.reflect.Array
-import java.util.*
-import kotlin.collections.HashMap
+package com.xenous.storyline.data
 
 data class User(
     val nickname : String? = null ,

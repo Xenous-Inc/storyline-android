@@ -1,20 +1,21 @@
-package com.xenous.storyline
+package com.xenous.storyline.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import com.x3noku.story.ERROR_CODE
-import com.x3noku.story.SUCCESS_CODE
-import java.net.PasswordAuthentication
+import com.xenous.storyline.R
+import com.xenous.storyline.data.Quote
+import com.xenous.storyline.utils.ERROR_CODE
+import com.xenous.storyline.utils.SUCCESS_CODE
 
 class QuotesActivity : AppCompatActivity() {
 

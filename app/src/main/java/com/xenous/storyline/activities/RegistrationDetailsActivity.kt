@@ -1,26 +1,19 @@
-package com.xenous.storyline
+package com.xenous.storyline.activities
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.os.Message
 import android.widget.*
-import androidx.core.view.get
-import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import java.net.PasswordAuthentication
+import com.xenous.storyline.R
+import com.xenous.storyline.utils.ERROR_CODE
+import com.xenous.storyline.utils.SUCCESS_CODE
 
 class RegistrationDetailsActivity : AppCompatActivity() {
-
-    companion object {
-        const val SUCCESS_CODE = 1
-        const val ERROR_CODE = 0
-    }
 
     private lateinit var authentication : FirebaseAuth
 
@@ -73,10 +66,7 @@ class RegistrationDetailsActivity : AppCompatActivity() {
         }
 
         sendUsersDetailsToDatabaseHandler = object : Handler() {
-
-            override fun handleMessage(msg: Message) {
-                super.handleMessage(msg)
-            }
+    
         }
 
         nextTextView.setOnClickListener {

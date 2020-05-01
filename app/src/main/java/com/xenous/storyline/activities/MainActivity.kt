@@ -19,8 +19,11 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.x3noku.story.StoryLayout
-import java.io.File
+import com.xenous.storyline.R
+import com.xenous.storyline.data.Story
+import com.xenous.storyline.data.User
+import com.xenous.storyline.fragments.StoryFragment
+import com.xenous.storyline.utils.StoryLayout
 
 
 class MainActivity : AppCompatActivity() {
@@ -48,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         fragmentFrameLayout = findViewById(R.id.fragmentFrameLayout)
-        val storyView = StoryLayout
+        val storyLayout = StoryLayout
             .Builder(
                 this,
                 "Хамалеон",
@@ -66,15 +69,13 @@ class MainActivity : AppCompatActivity() {
 
                 val storyFragment = StoryFragment()
 
-                storyView.setStoryCoverImageResource(R.drawable.demo_background)
-
-                storyView.storyCoverCardView.setOnClickListener {
-                    storyView.collapseStoryCover()
+                storyLayout.setCoverImageResource(R.drawable.demo_background)
+                storyLayout.cover.setOnClickListener {
+                    storyLayout.collapseStoryCover()
                 }
-
-                storyView.setContentFragment(storyFragment, supportFragmentManager)
-
-                fragmentFrameLayout.addView(storyView.view)
+                storyLayout.setContentFragment(storyFragment, supportFragmentManager)
+                
+                fragmentFrameLayout.addView(storyLayout.view)
             }
         }
 

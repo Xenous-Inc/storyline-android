@@ -1,4 +1,4 @@
-package com.xenous.storyline
+package com.xenous.storyline.data
 
 data class Quote(
     val author : String? = null,

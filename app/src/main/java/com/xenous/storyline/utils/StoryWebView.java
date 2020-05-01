@@ -1,4 +1,4 @@
-package com.xenous.storyline;
+package com.xenous.storyline.utils;
 
 import android.content.Context;
 import android.util.AttributeSet;

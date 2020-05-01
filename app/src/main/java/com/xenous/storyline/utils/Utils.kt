@@ -2,6 +2,7 @@ package com.xenous.storyline.utils
 
 import android.content.Context
 import android.util.DisplayMetrics
+
 const val ERROR_CODE = 0
 const val SUCCESS_CODE = 1
 

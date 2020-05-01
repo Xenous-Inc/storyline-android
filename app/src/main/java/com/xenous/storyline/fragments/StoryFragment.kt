@@ -1,7 +1,6 @@
 package com.xenous.storyline.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +9,7 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.xenous.storyline.R
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import java.io.File
+import com.xenous.storyline.activities.MainActivity
 
 class StoryFragment : Fragment() {
     private lateinit var storyWebView : WebView

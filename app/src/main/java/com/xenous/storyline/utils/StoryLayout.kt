@@ -4,17 +4,19 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
-import android.widget.*
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.xenous.storyline.utils.dpToPx
 import com.xenous.storyline.R
 
 
@@ -99,7 +101,18 @@ class StoryLayout(
             val titleHorizontalShift =
                 (coverWidthInPx - storyCoverTitleTextView.measuredWidth) / 2 -
                         collapsedCoverRadius
-
+            
+            run {
+                val storyContentLayoutParams =
+                    storyContentFrameLayout.layoutParams as ConstraintLayout.LayoutParams
+                
+                storyContentFrameLayout.layoutParams =
+                    storyContentLayoutParams
+                        .apply {
+                            height = storyContentFrameLayout.measuredHeight - collapsedCoverHeight.toInt()
+                        }
+            }
+            
             run {
                 storyContentFrameLayout.translationY = coverHeightInPx
 
@@ -142,8 +155,6 @@ class StoryLayout(
                     if(currentScrollValue < previousScrollValue) currentScrollValue
                     else previousScrollValue
             }
-            
-            Log.w(TAG, "$currentScrollValue")
             
             if(!isRunning && !isHidden &&
                     currentScrollValue - previousScrollValue >= collapsedCoverHeight/5

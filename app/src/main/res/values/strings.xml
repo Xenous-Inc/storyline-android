@@ -7,4 +7,5 @@
     <string name="email">E-mail</string>
     <string name="add_to_quotes">Добавить в цитаты</string>
     <string name="share">Поделиться</string>
+    <string name="auth">Войти</string>
 </resources>

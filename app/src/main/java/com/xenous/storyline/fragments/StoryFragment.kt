@@ -1,6 +1,7 @@
 package com.xenous.storyline.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,9 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.xenous.storyline.R
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import java.io.File
 
 class StoryFragment : Fragment() {
     private lateinit var storyWebView : WebView
@@ -26,10 +30,11 @@ class StoryFragment : Fragment() {
 
         storyWebView = view.findViewById(R.id.storyWebView)
 
-        val url = "https://www.york.ac.uk/teaching/cws/wws/webpage1.html"
-        storyWebView.loadUrl(url)
+        Toast.makeText(context, "dfdf", Toast.LENGTH_LONG).show()
 
-        registerForContextMenu(storyWebView)
+        val url = (activity) as MainActivity
+
+        storyWebView.loadUrl(url.storyUrl)
     }
 
     override fun onCreateContextMenu(

@@ -9,4 +9,7 @@
     <string name="share">Поделиться</string>
     <string name="auth">Войти</string>
     <string name="copy">Копировать</string>
+    <string name="too_long_quote_message">Цитата слишком длинная</string>
+    <string name="success_while_sending_quote_to_db">Новая цитата успешно создана</string>
+    <string name="error_while_sending_quote_to_db">При создании цитаты произошла ошибка</string>
 </resources>

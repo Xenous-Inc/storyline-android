@@ -9,4 +9,8 @@ data class Quote(
     override fun toString(): String {
         return "Book's name is $story. Story's author is $author. Quote's text is $text"
     }
+    
+    fun buildQuoteMessage() : String {
+        return text!! + "\n" + author + " - " + "\"" + story + "\""
+    }
 }

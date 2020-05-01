@@ -40,8 +40,7 @@ class StoryLayout(
         private val context: Context,
         private val title: String,
         private val author: String,
-        private val timeToRead: String,
-        private val text: String
+        private val timeToRead: String
     ) {
         @SuppressLint("InflateParams")
         fun build(layoutInflater: LayoutInflater) : StoryLayout {

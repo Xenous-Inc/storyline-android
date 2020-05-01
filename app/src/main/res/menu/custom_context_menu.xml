@@ -5,6 +5,10 @@
         android:title="@string/add_to_quotes"/>
 
     <item
+        android:id="@+id/copyItem"
+        android:title="@string/copy"/>
+
+    <item
         android:id="@+id/shareItem"
         android:title="@string/share"/>
 </menu>

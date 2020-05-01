@@ -5,7 +5,8 @@
     <string name="story_year">2317</string>
     <string name="story_time_to_read">Time to read  - 10 min</string>
     <string name="email">E-mail</string>
-    <string name="add_to_quotes">Добавить в цитаты</string>
+    <string name="add_to_quotes">Новая цитата</string>
     <string name="share">Поделиться</string>
     <string name="auth">Войти</string>
+    <string name="copy">Копировать</string>
 </resources>

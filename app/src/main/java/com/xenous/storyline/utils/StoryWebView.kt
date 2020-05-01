@@ -1,53 +1,41 @@
 package com.xenous.storyline.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
-import android.view.ActionMode
-import android.view.Menu
-import android.view.MenuItem
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
+import android.view.MotionEvent
 import android.webkit.WebView
+import com.xenous.storyline.activities.MainActivity
+import com.xenous.storyline.fragments.StoryFragment
+
 
 class StoryWebView(
-    context: Context?, attrs: AttributeSet?
-): WebView(context, attrs) {
-    private val callback: ActionMode.Callback = object: ActionMode.Callback {
-        override fun onCreateActionMode(
-            mode: ActionMode, menu: Menu
-        ): Boolean {
-            return false
+    context: Context?,
+    attrs: AttributeSet?
+) : WebView(context, attrs) {
+    
+    private val gt : GestureDetector
+    
+    private lateinit var fragment : StoryFragment
+    
+    private val simpleOnGestureListener : SimpleOnGestureListener = object: SimpleOnGestureListener() {
+        override fun onDown(event: MotionEvent) : Boolean {
+            return true
         }
-
-        override fun onPrepareActionMode(
-            mode: ActionMode, menu: Menu
-        ): Boolean {
-            return false
+    
+        override fun onLongPress(event: MotionEvent) {
+            fragment.setWebViewLongClickListener(this@StoryWebView)
         }
-
-        override fun onActionItemClicked(
-            mode: ActionMode, item: MenuItem
-        ): Boolean {
-            return false
-        }
-
-        override fun onDestroyActionMode(mode: ActionMode) {}
     }
     
-    var onScrollChangeListener: OnScrollChangeListener? = null
-    
-    override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
-        super.onScrollChanged(l, t, oldl, oldt)
-        Log.w("StoryLayout", "$t")
-        onScrollChangeListener?.onScrollChange(this, l, t, oldl, oldt)
+    init {
+        gt = GestureDetector(context, simpleOnGestureListener)
     }
-    
-    interface OnScrollChangeListener {
-        fun onScrollChange(
-            view: WebView,
-            scrollX: Int,
-            scrollY: Int,
-            oldScrollX: Int,
-            oldScrollY: Int
-        )
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return gt.onTouchEvent(event)
     }
 }

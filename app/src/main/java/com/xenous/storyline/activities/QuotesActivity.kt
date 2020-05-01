@@ -55,8 +55,8 @@ class QuotesActivity : AppCompatActivity() {
         authentication = FirebaseAuth.getInstance()
         user = authentication.currentUser
 
-        authentication.addAuthStateListener {
-            if(it.currentUser == null) {
+        authentication.addAuthStateListener { authentication ->
+            if(authentication.currentUser == null) {
                 startActivity(Intent(this, LoginActivity::class.java))
             }
         }

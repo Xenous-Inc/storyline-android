@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
         user = auth.currentUser
 
         if(user != null) {
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, RegistrationDetailsActivity::class.java))
         }
 
         signInTextView = findViewById(R.id.signInTextView)

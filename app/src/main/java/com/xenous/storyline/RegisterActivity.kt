@@ -24,6 +24,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var authentication : FirebaseAuth
 
+
     private val tag = "Registration"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +52,7 @@ class RegisterActivity : AppCompatActivity() {
                 authentication
                     .createUserWithEmailAndPassword(emailEditText.text.toString(), passwordEditText.text.toString())
                     .addOnSuccessListener {
+                        Toast.makeText(this, "Регистрация успешно", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this, RegistrationDetailsActivity::class.java))
                     }
                     .addOnFailureListener {

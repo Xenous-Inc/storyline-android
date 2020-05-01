@@ -6,7 +6,7 @@ import kotlin.collections.HashMap
 
 data class User(
     val nickname : String? = null ,
-    val interests : List<Int>? = null,
+    val interests : List<Long>? = null,
     val quotes_paths : List<String>? = null,
     val stats : Map<String, Any>? = null
 ) {

@@ -19,17 +19,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.154" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/interestsRecyclerView"
-        android:layout_width="348dp"
-        android:layout_height="517dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameEditText"
-        app:layout_constraintVertical_bias="0.302" />
-
     <TextView
         android:id="@+id/nextTextView"
         android:layout_width="wrap_content"
@@ -38,5 +27,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/interestsRecyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/nameEditText"
+        app:layout_constraintVertical_bias="0.90999997" />
+
+    <LinearLayout
+        android:id="@+id/interestsLinearLayout"
+        android:layout_width="337dp"
+        android:layout_height="443dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/nextTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameEditText"
+        app:layout_constraintVertical_bias="0.395"></LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

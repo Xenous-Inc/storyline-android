@@ -5,11 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -17,15 +17,22 @@ import java.net.PasswordAuthentication
 
 class RegistrationDetailsActivity : AppCompatActivity() {
 
+    companion object {
+        const val SUCCESS_CODE = 0
+        const val ERROR_CODE = 1
+    }
+
     private lateinit var authentication : FirebaseAuth
 
     private lateinit var nameEditText : EditText
-    private lateinit var interestsRecyclerView : RecyclerView
+    private lateinit var interestsLinearLayout : LinearLayout
     private lateinit var nextTextView : TextView
 
     private lateinit var sendUsersDetailsToDatabaseHandler : Handler
 
-    private val interestsIndexesList = arrayListOf<Int>()
+    private val userAnswers = arrayListOf(
+        -1, -1, -1, -1
+    )
 
     @SuppressLint("HandlerLeak")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +47,30 @@ class RegistrationDetailsActivity : AppCompatActivity() {
         }
 
         nameEditText = findViewById(R.id.nameEditText)
-        interestsRecyclerView = findViewById(R.id.interestsRecyclerView)
+        interestsLinearLayout = findViewById(R.id.interestsLinearLayout)
         nextTextView = findViewById(R.id.nextTextView)
+
+        val interestsTexts = listOf<String>(
+            "Русская классическая литература",
+            "Русская современная литература",
+            "Зарубежная классическая литература",
+            "Зарубежная современная литература"
+        )
+
+        for(checkBoxCounter in 0..3) {
+            val checkBox = CheckBox(this)
+            checkBox.text = interestsTexts[checkBoxCounter]
+            checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked) {
+                    userAnswers[checkBoxCounter] = checkBoxCounter
+                }
+                else {
+                    userAnswers[checkBoxCounter] = -1
+                }
+            }
+
+            interestsLinearLayout.addView(checkBox)
+        }
 
         sendUsersDetailsToDatabaseHandler = object : Handler() {
 
@@ -50,12 +79,35 @@ class RegistrationDetailsActivity : AppCompatActivity() {
             }
         }
 
-        
+        nextTextView.setOnClickListener {
+            if(isAllNecessaryFieldsEmpty()) {
+                Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val userInterests = arrayListOf<Long>()
+
+                for(userInterestsCounter in 0 until userAnswers.size) {
+                    if(userAnswers[userInterestsCounter] > -1) {
+                        userInterests.add(userAnswers[userInterestsCounter].toLong())
+                    }
+                }
+            }
+        }
 
     }
 
     private fun isAllNecessaryFieldsEmpty() : Boolean {
-        if(nameEditText.text.isBlank() || interestsIndexesList.size == 0) {
+        var isUsersAnswersListEmpty = false
+
+        for(userAnswersCounter in 0 until userAnswers.size) {
+            if(userAnswers[userAnswersCounter] > -1) {
+                isUsersAnswersListEmpty = true
+
+                break
+            }
+        }
+
+        if(nameEditText.text.isBlank() || !isUsersAnswersListEmpty) {
             return true
         }
 
@@ -63,7 +115,7 @@ class RegistrationDetailsActivity : AppCompatActivity() {
     }
 
     inner class SendUsersDetailsToDataBaseThread(
-        private val user : User
+        private val user : FirebaseUser
     ) : Thread() {
         override fun run() {
             super.run()
@@ -73,10 +125,10 @@ class RegistrationDetailsActivity : AppCompatActivity() {
                 .document(authentication.currentUser.toString())
                 .set(user)
                 .addOnSuccessListener {
-                    sendUsersDetailsToDatabaseHandler.sendMessage(sendUsersDetailsToDatabaseHandler.obtainMessage())
+                    sendUsersDetailsToDatabaseHandler.sendEmptyMessage(SUCCESS_CODE)
                 }
                 .addOnFailureListener {
-
+                    sendUsersDetailsToDatabaseHandler.sendEmptyMessage(ERROR_CODE)
                 }
         }
     }

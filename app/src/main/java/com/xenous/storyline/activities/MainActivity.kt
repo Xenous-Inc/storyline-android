@@ -78,12 +78,33 @@ class MainActivity : AppCompatActivity() {
                 super.handleMessage(msg)
 
                 storyFragment = StoryFragment()
-                
-                storyLayout.setCoverImageResource(R.drawable.demo_background)
+    
                 storyLayout.cover.setOnClickListener {
                     storyLayout.collapseStoryCover()
                 }
+                storyLayout.setCoverImageResource(R.drawable.demo_background)
                 storyLayout.setContentFragment(storyFragment!!, supportFragmentManager)
+                storyLayout.actionButton.setImageResource(
+                    if(user != null) {
+                        R.drawable.ic_quote_32dp
+                    }
+                    else {
+                        R.drawable.ic_sync_32dp
+                    }
+                )
+                storyLayout.actionButton.setOnClickListener {
+                    if(user != null) {
+                        // ToDo: inflate menu
+                    }
+                    else {
+                        startActivity(
+                            Intent(
+                                this@MainActivity,
+                                LoginActivity::class.java
+                            )
+                        )
+                    }
+                }
                 
                 fragmentFrameLayout.addView(storyLayout.view)
             }

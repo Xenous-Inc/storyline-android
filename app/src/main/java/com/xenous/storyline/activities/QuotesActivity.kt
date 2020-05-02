@@ -18,7 +18,6 @@ import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.SUCCESS_CODE
 
 class QuotesActivity : AppCompatActivity() {
-
     private companion object {
         const val TAG = "Quotes Activity"
     }
@@ -61,14 +60,17 @@ class QuotesActivity : AppCompatActivity() {
             }
         }
     }
-
-
+    
     inner class DownloadQuotesThread : Thread() {
 
         override fun run() {
             super.run()
 
-            Firebase.firestore.collection("users").document(user!!.uid).collection("quotes")
+            Firebase
+                .firestore
+                .collection("users")
+                .document(user!!.uid)
+                .collection("quotes")
                 .get()
                 .addOnSuccessListener {
                     Log.d(TAG, "Request has been managed")
@@ -85,9 +87,9 @@ class QuotesActivity : AppCompatActivity() {
 
                     downloadQuotesHandler.sendEmptyMessage(SUCCESS_CODE)
                 }
-                .addOnFailureListener { exception ->
+                .addOnFailureListener { e ->
                     Log.d(TAG, "Request failed")
-                    Log.d(TAG, exception.toString())
+                    Log.d(TAG, e.toString())
 
                     downloadQuotesHandler.sendEmptyMessage(ERROR_CODE)
                 }

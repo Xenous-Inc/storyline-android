@@ -75,7 +75,7 @@ class StoryLayout(
 //    Метод установки ресурса для ImageView обложки
     fun setCoverImageResource(resourceId: Int) =
         view.findViewById<ImageView>(R.id.storyCoverImageView).setImageResource(resourceId)
-
+    
 //    Метод установки Fragment в FrameLayout для контента
     fun setContentFragment(fragment: Fragment, fragmentManager: FragmentManager) {
         val fragmentTransaction = fragmentManager.beginTransaction()
@@ -98,7 +98,8 @@ class StoryLayout(
 
             val coverVerticalShift = coverHeightInPx - collapsedCoverHeight
             val actionVerticalSift = coverVerticalShift +
-                    (collapsedCoverHeight - actionButton.measuredHeight) / 2
+                    (collapsedCoverHeight - actionButton.measuredHeight) / 2 -
+                    24.dpToPx(context)
             val titleVerticalShift = coverVerticalShift/2
             val titleHorizontalShift =
                 (coverWidthInPx - storyCoverTitleTextView.measuredWidth) / 2 -

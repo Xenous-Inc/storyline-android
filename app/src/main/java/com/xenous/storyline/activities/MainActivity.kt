@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         fragmentFrameLayout = findViewById(R.id.fragmentFrameLayout)
         val storyLayout = StoryLayout
             .Builder(
@@ -79,13 +78,34 @@ class MainActivity : AppCompatActivity() {
                 super.handleMessage(msg)
 
                 storyFragment = StoryFragment()
-                
-                storyLayout.setCoverImageResource(R.drawable.demo_background)
+    
                 storyLayout.cover.setOnClickListener {
-                    //startActivity(Intent(this@MainActivity, QuotesActivity::class.java))
+                    startActivity(Intent(this@MainActivity, QuotesActivity::class.java))
                     storyLayout.collapseStoryCover()
                 }
+                storyLayout.setCoverImageResource(R.drawable.demo_background)
                 storyLayout.setContentFragment(storyFragment!!, supportFragmentManager)
+                storyLayout.actionButton.setImageResource(
+                    if(user != null) {
+                        R.drawable.ic_quote_32dp
+                    }
+                    else {
+                        R.drawable.ic_sync_32dp
+                    }
+                )
+                storyLayout.actionButton.setOnClickListener {
+                    if(user != null) {
+                        // ToDo: inflate menu
+                    }
+                    else {
+                        startActivity(
+                            Intent(
+                                this@MainActivity,
+                                LoginActivity::class.java
+                            )
+                        )
+                    }
+                }
                 
                 fragmentFrameLayout.addView(storyLayout.view)
             }
@@ -132,17 +152,15 @@ class MainActivity : AppCompatActivity() {
             storyFragment?.storyWebView!!.evaluateJavascript(
                 "window.getSelection().toString()"
             ) {value ->
-                val quoteText = value.replace("\"", "")
-                
-                if(quoteText.isEmpty()) {
+                if(value.isEmpty()) {
                     Log.d(QUOTE_TAG, "The quote is empty")
                 
                     return@evaluateJavascript
                 }
             
-                Log.d(QUOTE_TAG, "The quote's text is $quoteText")
+                Log.d(QUOTE_TAG, "The quote's text is $value")
             
-                if(quoteText.split(" ").size >= AVAILABLE_QUOTE_LENGTH) {
+                if(value.trim().split(" ").size >= AVAILABLE_QUOTE_LENGTH) {
                     Log.d(QUOTE_TAG, "The quote's text is too long")
                     
                     DynamicToast.makeWarning(
@@ -155,9 +173,9 @@ class MainActivity : AppCompatActivity() {
                 }
             
                 when(menuItem.itemId) {
-                    R.id.addToQuotesItem -> addQuoteToDatabase(quoteText)
-                    R.id.copyItem -> copyQuote(quoteText)
-                    R.id.shareItem -> shareQuote(quoteText)
+                    R.id.addToQuotesItem -> addQuoteToDatabase(value)
+                    R.id.copyItem        -> copyQuote(value)
+                    R.id.shareItem       -> shareQuote(value)
                 }
             }
         
@@ -295,7 +313,8 @@ class MainActivity : AppCompatActivity() {
                         }
 
                 }
-                .addOnFailureListener {}
+                .addOnFailureListener {
+                }
 
         }
     }

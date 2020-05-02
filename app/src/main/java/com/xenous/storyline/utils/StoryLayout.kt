@@ -9,10 +9,7 @@ import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -54,13 +51,17 @@ class StoryLayout(
 //    View обложки истории
     val cover: CardView =
         view.findViewById(R.id.storyCoverCardView)
+    
+//    Кнопка в правом верхнем углу
+    val actionButton: ImageButton =
+        view.findViewById(R.id.storyCoverActionImageButton)
 
 //    Поле свернутости обложки
     var isCollapsed = false
         private set
 
 //    Свойство высоты обложки в свернутом состоянии
-    var collapsedCoverHeight = 100F.dpToPx(context)
+    var collapsedCoverHeight = 80F.dpToPx(context)
 
 //    Свойство радиуса скругления обложки в свернутом состоянии
     var collapsedCoverRadius = 30F.dpToPx(context)
@@ -74,7 +75,7 @@ class StoryLayout(
 //    Метод установки ресурса для ImageView обложки
     fun setCoverImageResource(resourceId: Int) =
         view.findViewById<ImageView>(R.id.storyCoverImageView).setImageResource(resourceId)
-
+    
 //    Метод установки Fragment в FrameLayout для контента
     fun setContentFragment(fragment: Fragment, fragmentManager: FragmentManager) {
         val fragmentTransaction = fragmentManager.beginTransaction()
@@ -96,6 +97,9 @@ class StoryLayout(
             val coverWidthInPx = cover.measuredWidth.toFloat()
 
             val coverVerticalShift = coverHeightInPx - collapsedCoverHeight
+            val actionVerticalSift = coverVerticalShift +
+                    (collapsedCoverHeight - actionButton.measuredHeight) / 2 -
+                    24.dpToPx(context)
             val titleVerticalShift = coverVerticalShift/2
             val titleHorizontalShift =
                 (coverWidthInPx - storyCoverTitleTextView.measuredWidth) / 2 -
@@ -118,6 +122,9 @@ class StoryLayout(
                 Animator(cover, context, collapsingAnimationDuration)
                     .moveVerticallyTo(-coverVerticalShift)
                     .setRadiusTo(collapsedCoverRadius)
+                
+                Animator(actionButton, context, collapsingAnimationDuration)
+                    .moveVerticallyTo(actionVerticalSift)
 
                 Animator(storyCoverTitleTextView, context, collapsingAnimationDuration)
                     .moveVerticallyTo(titleVerticalShift)

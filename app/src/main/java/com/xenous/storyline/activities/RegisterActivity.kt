@@ -34,9 +34,8 @@ class RegisterActivity : AppCompatActivity() {
         emailEditText = findViewById(R.id.emailEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
         repeatPasswordEditText = findViewById(R.id.repeatPasswordEditText)
-        signInWithGoogleImageButton = findViewById(R.id.signInWithGoogleButton)
         createAccountTextView = findViewById(R.id.createAccountTextView)
-        backTextView = findViewById(R.id.backTextView)
+        backTextView = findViewById(R.id.signInTextView)
 
         backTextView.setOnClickListener {
             onBackPressed()
@@ -58,10 +57,6 @@ class RegisterActivity : AppCompatActivity() {
                         Toast.makeText(this, "Произошла ошибка при регистрации", Toast.LENGTH_SHORT).show()
                     }
             }
-        }
-
-        signInWithGoogleImageButton.setOnClickListener {
-
         }
 
     }

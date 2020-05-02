@@ -14,6 +14,7 @@ import android.text.ClipboardManager
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.pranavpandey.android.dynamic.toasts.DynamicToast
 import com.xenous.storyline.R
 import com.xenous.storyline.data.Quote
 import com.xenous.storyline.data.Story
@@ -28,12 +30,14 @@ import com.xenous.storyline.data.User
 import com.xenous.storyline.fragments.StoryFragment
 import com.xenous.storyline.utils.StoryLayout
 
-
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
 
     private companion object {
         const val TAG = "MainActivity"
         const val QUOTE_TAG = "StoryFragment : Quote"
+        
+        const val AVAILABLE_QUOTE_LENGTH = 5
     }
     
     private lateinit var fragmentFrameLayout: FrameLayout
@@ -78,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 
                 storyLayout.setCoverImageResource(R.drawable.demo_background)
                 storyLayout.cover.setOnClickListener {
-                    startActivity(Intent(this@MainActivity, QuotesActivity::class.java))
+                    storyLayout.collapseStoryCover()
                 }
                 storyLayout.setContentFragment(storyFragment!!, supportFragmentManager)
                 
@@ -124,30 +128,38 @@ class MainActivity : AppCompatActivity() {
         )
         menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         menuItem.setOnMenuItemClickListener {menuItem ->
-            try {
-                storyFragment?.storyWebView!!.evaluateJavascript(
-                    "window.getSelection().toString()"
-                ) {value ->
-                    Log.d(QUOTE_TAG, "The quote's text is $value")
-    
-                    if(value.isEmpty()) {
-                        return@evaluateJavascript
-                    }
-                    //TODO: checking of quote's length
+            storyFragment?.storyWebView!!.evaluateJavascript(
+                "window.getSelection().toString()"
+            ) {value ->
+                if(value.isEmpty()) {
+                    Log.d(QUOTE_TAG, "The quote is empty")
+                
+                    return@evaluateJavascript
+                }
+            
+                Log.d(QUOTE_TAG, "The quote's text is $value")
+            
+                if(value.split(" ").size >= AVAILABLE_QUOTE_LENGTH) {
+                    Log.d(QUOTE_TAG, "The quote's text is too long")
                     
-                    when(menuItem.itemId) {
-                        R.id.addToQuotesItem -> addQuoteToDatabase(value)
-                        R.id.copyItem -> copyQuote(value)
-                        R.id.shareItem -> shareQuote(value)
-                    }
+                    DynamicToast.makeWarning(
+                        this,
+                        getString(R.string.too_long_quote_message),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                
+                    return@evaluateJavascript
+                }
+            
+                when(menuItem.itemId) {
+                    R.id.addToQuotesItem -> addQuoteToDatabase(value)
+                    R.id.copyItem        -> copyQuote(value)
+                    R.id.shareItem       -> shareQuote(value)
                 }
             }
-            catch(exception : NullPointerException) {
-                return@setOnMenuItemClickListener false
-            }
-            
+        
             actionMode?.finish()
-            
+        
             true
         }
     }
@@ -188,12 +200,18 @@ class MainActivity : AppCompatActivity() {
                     .set(quote)
                     .addOnSuccessListener {
                         Log.d(QUOTE_TAG, "Quote has been sent to database successfully")
+                        
+                        DynamicToast.makeSuccess(this, getString(R.string.success_while_sending_quote_to_db), Toast.LENGTH_SHORT).show()
                     }
                     .addOnCanceledListener {
                         Log.d(QUOTE_TAG, "Quote has been canceled while sending to database")
+                        
+                        DynamicToast.makeError(this, getString(R.string.error_while_sending_quote_to_db), Toast.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener {
                         Log.d(QUOTE_TAG, "Quote has been failed while sending to database. The cause is ${it.cause.toString()}")
+    
+                        DynamicToast.makeError(this, getString(R.string.error_while_sending_quote_to_db), Toast.LENGTH_SHORT).show()
                     }
             }
     }
@@ -246,8 +264,6 @@ class MainActivity : AppCompatActivity() {
 
 
     inner class DownloadDataForUnregisteredUserThread(private val handler: Handler) : Thread() {
-        private var url : String? = null
-
         private val tag = "UnregisterUserDownload"
 
         private val defaultDocumentReference = Firebase.firestore.collection("books").document("0")
@@ -322,9 +338,6 @@ class MainActivity : AppCompatActivity() {
                         .addOnCanceledListener {
                             Log.d(tag, "Error")
                         }
-
-
-
                 }
         }
     }

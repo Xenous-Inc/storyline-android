@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         const val TAG = "MainActivity"
         const val QUOTE_TAG = "StoryFragment : Quote"
         
-        const val AVAILABLE_QUOTE_LENGTH = 5
+        const val AVAILABLE_QUOTE_LENGTH = 35
     }
     
     private lateinit var fragmentFrameLayout: FrameLayout
@@ -80,6 +80,7 @@ class MainActivity : AppCompatActivity() {
                 storyFragment = StoryFragment()
     
                 storyLayout.cover.setOnClickListener {
+                    startActivity(Intent(this@MainActivity, QuotesActivity::class.java))
                     storyLayout.collapseStoryCover()
                 }
                 storyLayout.setCoverImageResource(R.drawable.demo_background)

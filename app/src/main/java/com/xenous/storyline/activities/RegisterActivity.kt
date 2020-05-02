@@ -65,8 +65,6 @@ class RegisterActivity : AppCompatActivity() {
         if(emailEditText.text.isBlank() || passwordEditText.text.isBlank() || repeatPasswordEditText.text.isBlank()) {
             return true
         }
-
         return false
-
     }
 }

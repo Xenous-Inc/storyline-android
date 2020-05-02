@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F2E8"
+    android:background="@color/colorBackground"
     android:padding="32dp">
 
     <!-- Move all literals to values files -->
@@ -28,6 +28,7 @@
         android:fontFamily="serif"
         android:hint="E-mail"
         android:inputType="textEmailAddress"
+        android:singleLine="true"
         android:textSize="24sp"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@+id/passwordEditText"
@@ -43,6 +44,7 @@
         android:fontFamily="serif"
         android:hint="Пароль"
         android:inputType="textPassword"
+        android:singleLine="true"
         android:textSize="24sp"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@+id/repeatPasswordEditText"
@@ -58,6 +60,7 @@
         android:fontFamily="serif"
         android:hint="Повторите пароль"
         android:inputType="textPassword"
+        android:singleLine="true"
         android:textSize="24sp"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@+id/guideline"

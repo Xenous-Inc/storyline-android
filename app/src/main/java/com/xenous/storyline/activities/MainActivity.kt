@@ -80,7 +80,6 @@ class MainActivity : AppCompatActivity() {
                 storyFragment = StoryFragment()
     
                 storyLayout.cover.setOnClickListener {
-                    startActivity(Intent(this@MainActivity, QuotesActivity::class.java))
                     storyLayout.collapseStoryCover()
                 }
                 storyLayout.setCoverImageResource(R.drawable.demo_background)

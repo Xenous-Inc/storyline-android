@@ -13,4 +13,6 @@
     <string name="success_while_sending_quote_to_db">Новая цитата успешно создана</string>
     <string name="error_while_sending_quote_to_db">При создании цитаты произошла ошибка</string>
     <string name="error_while_download_quotes">Произошла ошибка при загрузке цитат</string>
+    <string name="not_fully_necessary">Заполните всю необходимую информацию</string>
+    <string name="unknown_error">Произошла неизваестная ошибка</string>
 </resources>

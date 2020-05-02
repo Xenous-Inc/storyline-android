@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 
                 storyLayout.setCoverImageResource(R.drawable.demo_background)
                 storyLayout.cover.setOnClickListener {
-                    startActivity(Intent(this@MainActivity, QuotesActivity::class.java))
+                    //startActivity(Intent(this@MainActivity, QuotesActivity::class.java))
                     storyLayout.collapseStoryCover()
                 }
                 storyLayout.setContentFragment(storyFragment!!, supportFragmentManager)
@@ -132,15 +132,17 @@ class MainActivity : AppCompatActivity() {
             storyFragment?.storyWebView!!.evaluateJavascript(
                 "window.getSelection().toString()"
             ) {value ->
-                if(value.isEmpty()) {
+                val quoteText = value.replace("\"", "")
+                
+                if(quoteText.isEmpty()) {
                     Log.d(QUOTE_TAG, "The quote is empty")
                 
                     return@evaluateJavascript
                 }
             
-                Log.d(QUOTE_TAG, "The quote's text is $value")
+                Log.d(QUOTE_TAG, "The quote's text is $quoteText")
             
-                if(value.split(" ").size >= AVAILABLE_QUOTE_LENGTH) {
+                if(quoteText.split(" ").size >= AVAILABLE_QUOTE_LENGTH) {
                     Log.d(QUOTE_TAG, "The quote's text is too long")
                     
                     DynamicToast.makeWarning(
@@ -153,9 +155,9 @@ class MainActivity : AppCompatActivity() {
                 }
             
                 when(menuItem.itemId) {
-                    R.id.addToQuotesItem -> addQuoteToDatabase(value)
-                    R.id.copyItem        -> copyQuote(value)
-                    R.id.shareItem       -> shareQuote(value)
+                    R.id.addToQuotesItem -> addQuoteToDatabase(quoteText)
+                    R.id.copyItem -> copyQuote(quoteText)
+                    R.id.shareItem -> shareQuote(quoteText)
                 }
             }
         

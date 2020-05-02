@@ -12,4 +12,5 @@
     <string name="too_long_quote_message">Цитата слишком длинная</string>
     <string name="success_while_sending_quote_to_db">Новая цитата успешно создана</string>
     <string name="error_while_sending_quote_to_db">При создании цитаты произошла ошибка</string>
+    <string name="error_while_download_quotes">Произошла ошибка при загрузке цитат</string>
 </resources>

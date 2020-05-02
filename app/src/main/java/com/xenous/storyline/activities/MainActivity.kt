@@ -300,7 +300,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkUserStatus() {
-        downloadDataFromDatabaseThread = DownloadDataFromUsersDatabaseThread(downloadDataFromDatabaseHandler)
+        downloadDataFromDatabaseThread = DownloadDataFromUsersDatabaseThread()
         downloadDataForUnregisteredUserThread = DownloadDataForUnregisteredUserThread(downloadDataFromDatabaseHandler)
 
         if(user == null) {
@@ -346,7 +346,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    inner class DownloadDataFromUsersDatabaseThread(private val handler: Handler) : Thread() {
+    inner class DownloadDataFromUsersDatabaseThread : Thread() {
 
         private val db = Firebase.firestore
 
@@ -398,7 +398,10 @@ class MainActivity : AppCompatActivity() {
         }
         
         private fun findBook() : String {
-            TODO()
+            // Analyze user's interests and history of his books.
+            // After that return a new book, which matches user's interests and has been never read by current user.
+            // If There is not such book, warn user about it and offer to wait new stories
+            TODO("Bot implemented yet")
         }
     }
     

@@ -43,7 +43,7 @@ class RegistrationDetailsActivity : AppCompatActivity() {
         interestsLinearLayout = findViewById(R.id.interestsLinearLayout)
         nextTextView = findViewById(R.id.nextTextView)
 
-        val interestsTexts = listOf<String>(
+        val interestsTexts = listOf(
             "Русская классическая литература",
             "Русская современная литература",
             "Зарубежная классическая литература",

@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         fragmentFrameLayout = findViewById(R.id.fragmentFrameLayout)
         val storyLayout = StoryLayout
             .Builder(
@@ -139,7 +138,7 @@ class MainActivity : AppCompatActivity() {
             
                 Log.d(QUOTE_TAG, "The quote's text is $value")
             
-                if(value.split(" ").size >= AVAILABLE_QUOTE_LENGTH) {
+                if(value.trim().split(" ").size >= AVAILABLE_QUOTE_LENGTH) {
                     Log.d(QUOTE_TAG, "The quote's text is too long")
                     
                     DynamicToast.makeWarning(

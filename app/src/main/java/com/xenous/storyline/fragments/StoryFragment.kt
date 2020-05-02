@@ -2,11 +2,8 @@ package com.xenous.storyline.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.webkit.ValueCallback
 import android.webkit.WebView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.xenous.storyline.R
 import com.xenous.storyline.activities.MainActivity
@@ -32,7 +29,7 @@ class StoryFragment : Fragment() {
         
         val url = (activity) as MainActivity
 
-        storyWebView.loadUrl(url.storyUrl)
+        storyWebView.loadUrl(url.todayStoryUrl)
         
         storyWebView.isLongClickable = false
       

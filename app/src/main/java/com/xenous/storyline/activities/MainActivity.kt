@@ -28,7 +28,11 @@ import com.xenous.storyline.data.Quote
 import com.xenous.storyline.data.Story
 import com.xenous.storyline.data.User
 import com.xenous.storyline.fragments.StoryFragment
+import com.xenous.storyline.utils.ERROR_CODE
+import com.xenous.storyline.utils.SUCCESS_CODE
 import com.xenous.storyline.utils.StoryLayout
+import java.util.*
+import kotlin.collections.ArrayList
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
@@ -36,6 +40,8 @@ class MainActivity : AppCompatActivity() {
     private companion object {
         const val TAG = "MainActivity"
         const val QUOTE_TAG = "StoryFragment : Quote"
+        const val DOWNLOAD_TAG = "DownloadingFromDataBase"
+        const val UPDATE_USER_STATS_TAG = "UpdateStatsInDatabase"
         
         const val AVAILABLE_QUOTE_LENGTH = 35
     }
@@ -55,7 +61,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var authentication : FirebaseAuth
 
     var todayStory : Story? = null
-    var storyUrl : String? = null
+    var todayStoryUrl : String? = null
+    var currentUser : User? = null
 
     @SuppressLint("HandlerLeak")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,6 +88,14 @@ class MainActivity : AppCompatActivity() {
     
                 storyLayout.cover.setOnClickListener {
                     storyLayout.collapseStoryCover()
+                    
+                    val newUserStats = createUpdatedUserStats()
+                    if(newUserStats == null) {
+                        return@setOnClickListener
+                    }
+                    else {
+                        UpdateUserStatsInDatabaseThread(newUserStats).start()
+                    }
                 }
                 storyLayout.setCoverImageResource(R.drawable.demo_background)
                 storyLayout.setContentFragment(storyFragment!!, supportFragmentManager)
@@ -94,15 +109,7 @@ class MainActivity : AppCompatActivity() {
                 )
                 storyLayout.actionButton.setOnClickListener {
                     if(user != null) {
-                        // ToDo: inflate menu
-                    }
-                    else {
-                        startActivity(
-                            Intent(
-                                this@MainActivity,
-                                LoginActivity::class.java
-                            )
-                        )
+                        startActivity(Intent(this@MainActivity, QuotesActivity::class.java))
                     }
                 }
                 
@@ -184,7 +191,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
-    private fun shareQuote(quoteText: String) {
+    private fun shareQuote(quoteText : String) {
         val quote = Quote(todayStory?.author, todayStory?.name, quoteText)
         
         val shareIntent = Intent()
@@ -193,6 +200,28 @@ class MainActivity : AppCompatActivity() {
         shareIntent.type = "text/plain"
         
         startActivity(shareIntent)
+    }
+    
+    private fun createUpdatedUserStats() : Map<String, Long>? {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = System.currentTimeMillis()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+  
+        //TODO: Solve problem with matching time
+        
+        if(calendar.timeInMillis == currentUser!!.stats!!["last_date"] as Long) {
+            return null
+        }
+        
+        val newRating : Long = 0 //This param is for update rating TODO: add rating logic
+        val newDate = calendar.timeInMillis
+        val streak = currentUser!!.stats!!["streak"] as Long + 1
+        
+        return mapOf(
+            "last_date" to newDate,
+            "level" to newRating,
+            "streak" to streak
+        )
     }
     
     private fun copyQuote(quoteText: String) {
@@ -281,8 +310,7 @@ class MainActivity : AppCompatActivity() {
             downloadDataFromDatabaseThread.start()
         }
     }
-
-
+    
     inner class DownloadDataForUnregisteredUserThread(private val handler: Handler) : Thread() {
         private val tag = "UnregisterUserDownload"
 
@@ -301,7 +329,7 @@ class MainActivity : AppCompatActivity() {
                         .child(todayStory!!.path_to_text!!)
                         .downloadUrl
                         .addOnSuccessListener {
-                            storyUrl = it.toString()
+                            todayStoryUrl = it.toString()
 
                             Log.d(tag, "Book's Url has been downloaded completely")
 
@@ -322,42 +350,78 @@ class MainActivity : AppCompatActivity() {
 
         private val db = Firebase.firestore
 
-        private val tag = "DownloadingFromDataBase"
-
-        private var userInfo: User? = null
-
         override fun run() {
             super.run()
-
-            db.collection("books")
-                .document("0")
+            
+            db.collection("users")
+                .document(user!!.uid)
                 .get()
-                .addOnSuccessListener { documentDataSnapshot ->
-                    todayStory = documentDataSnapshot.toObject<Story>()
-
-                    db.collection("users").document("test_id")
+                .addOnSuccessListener { userDocumentSnapshot ->
+                    currentUser = userDocumentSnapshot.toObject<User>()
+                    
+                    db.collection("books")
+                        .document("0") // Here function findBook() will return index of today's story in the storage
                         .get()
-                        .addOnSuccessListener {
-                            userInfo = it.toObject<User>()
-
+                        .addOnSuccessListener {bookDocumentSnapshot ->
+                            
+                            todayStory = bookDocumentSnapshot.toObject<Story>()
+    
                             val reference = Firebase.storage.reference.child(todayStory!!.path_to_text!!)
-
-                            reference.downloadUrl.
-                                addOnSuccessListener { uri ->
-                                    Log.d(tag, "Book's Url has been downloaded completely")
-                                    storyUrl = uri.toString()
-
-                                    handler.sendMessage(handler.obtainMessage())
+                            reference.downloadUrl
+                                .addOnSuccessListener { uri ->
+                                    todayStoryUrl = uri.toString()
+                                    
+                                    downloadDataFromDatabaseHandler.sendEmptyMessage(SUCCESS_CODE)
                                 }
                                 .addOnFailureListener {
-                                    Log.d(tag, "Books downloading has been failed")
+                                    downloadDataFromDatabaseHandler.sendEmptyMessage(ERROR_CODE)
                                 }
-
-                            Log.d(tag, userInfo.toString())
+                                .addOnCanceledListener {
+                                    downloadDataFromDatabaseHandler.sendEmptyMessage(ERROR_CODE)
+                                }
+                            
+                        }
+                        .addOnFailureListener {
+                            Log.d(DOWNLOAD_TAG, "Books downloading has been failed")
+                            
+                            downloadDataFromDatabaseHandler.sendEmptyMessage(ERROR_CODE)
                         }
                         .addOnCanceledListener {
-                            Log.d(tag, "Error")
+                            Log.d(DOWNLOAD_TAG, "Books downloading has been failed")
+                            
+                            downloadDataFromDatabaseHandler.sendEmptyMessage(ERROR_CODE)
                         }
+                }
+                .addOnFailureListener {
+                
+                }
+        }
+        
+        private fun findBook() : String {
+            TODO()
+        }
+    }
+    
+    inner class UpdateUserStatsInDatabaseThread(
+        private val userStatsMap : Map<String, Long>
+    
+    ) : Thread() {
+        override fun run() {
+            super.run()
+            
+            val userToDb = currentUser
+            userToDb!!.stats = userStatsMap
+    
+            Firebase.firestore.collection("users").document(user!!.uid)
+                .set(userToDb)
+                .addOnSuccessListener {
+                    Log.d(UPDATE_USER_STATS_TAG, "User stats have been updated successfully")
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(UPDATE_USER_STATS_TAG, "User stats have been updated unsuccessfully. The cause is ${exception.cause}")
+                }
+                .addOnCanceledListener {
+                    Log.d(UPDATE_USER_STATS_TAG, "User stats' update has been canceled")
                 }
         }
     }

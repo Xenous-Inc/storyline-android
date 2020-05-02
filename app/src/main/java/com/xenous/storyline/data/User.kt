@@ -1,9 +1,9 @@
 package com.xenous.storyline.data
 
 data class User(
-    val nickname : String? = null ,
-    val interests : List<Long>? = null,
-    val stats : Map<String, Any>? = null
+    var nickname : String? = null,
+    var interests : List<Long>? = null,
+    var stats : Map<String, Any>? = null
 ) {
 
     override fun toString(): String {

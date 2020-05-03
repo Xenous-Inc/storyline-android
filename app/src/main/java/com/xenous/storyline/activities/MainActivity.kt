@@ -28,6 +28,8 @@ import com.xenous.storyline.data.Quote
 import com.xenous.storyline.data.Story
 import com.xenous.storyline.data.User
 import com.xenous.storyline.fragments.StoryFragment
+import com.xenous.storyline.threads.DownloadRecommendedStoryThread
+import com.xenous.storyline.utils.CANCEL_CODE
 import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.SUCCESS_CODE
 import com.xenous.storyline.utils.StoryLayout
@@ -69,67 +71,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         fragmentFrameLayout = findViewById(R.id.fragmentFrameLayout)
-        val storyLayout = StoryLayout
-            .Builder(
-                this,
-                "Хамалеон",
-                "Антон Павлович Чехов",
-                "Читать 5 минут"
-            ).build(layoutInflater)
 
         authentication = FirebaseAuth.getInstance()
         user = authentication.currentUser
 
-        downloadDataFromDatabaseHandler = object : Handler() {
-            override fun handleMessage(msg: Message) {
-                super.handleMessage(msg)
-
-                storyFragment = StoryFragment()
-    
-                storyLayout.cover.setOnClickListener {
-                    storyLayout.collapseStoryCover()
-                    
-                    val newUserStats = createUpdatedUserStats()
-                    if(newUserStats == null) {
-                        return@setOnClickListener
-                    }
-                    else {
-                        UpdateUserStatsInDatabaseThread(newUserStats).start()
-                    }
-                }
-                storyLayout.setCoverImageResource(R.drawable.demo_background)
-                storyLayout.setContentFragment(storyFragment!!, supportFragmentManager)
-                storyLayout.actionButton.setImageResource(
-                    if(user != null) {
-                        R.drawable.ic_account_circle_32dp
-                    }
-                    else {
-                        R.drawable.ic_sync_32dp
-                    }
-                )
-                storyLayout.actionButton.setOnClickListener {
-                    if(user != null) {
-                        startActivity(
-                            Intent(
-                                this@MainActivity,
-                                ProfileActivity::class.java
-                            )
-                        )
-                    }
-                    else {
-                        startActivity(
-                            Intent(
-                                this@MainActivity,
-                                LoginActivity::class.java
-                            )
-                        )
-                    }
-                }
-                
-                fragmentFrameLayout.addView(storyLayout.view)
-            }
-        }
-
+//        ToDo: USER MAY BE NULL,
+        DownloadRecommendedStoryThread(currentUser!!, getOnDownloadStoryHandler()).start()
         checkUserStatus()
         makeStatusBarTransparent()
     }
@@ -222,13 +169,13 @@ class MainActivity : AppCompatActivity() {
   
         //TODO: Solve problem with matching time
         
-        if(calendar.timeInMillis == currentUser!!.stats!!["last_date"] as Long) {
+        if(calendar.timeInMillis == currentUser!!.stats["last_date"] as Long) {
             return null
         }
         
         val newRating : Long = 0 //This param is for update rating TODO: add rating logic
         val newDate = calendar.timeInMillis
-        val streak = currentUser!!.stats!!["streak"] as Long + 1
+        val streak = currentUser!!.stats["streak"] as Long + 1
         
         return hashMapOf(
             "last_date" to newDate,
@@ -324,6 +271,75 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
+    @SuppressLint("HandlerLeak")
+    private fun getOnDownloadStoryHandler() = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            
+            try {
+                val story = msg.obj as Story
+                buildStoryLayout(story)
+            }
+            catch(e: ClassCastException) {
+                // ToDo: Notify User About This Problem
+            }
+            if(msg.what == ERROR_CODE || msg.what == CANCEL_CODE) {
+                Log.e(TAG, "ERROR OOCURED WHILE GETTING STORY")
+                // ToDo: notify user
+            }
+        }
+        
+    }
+    
+    fun buildStoryLayout(story: Story) {
+        val storyLayout = StoryLayout.Builder(
+            this,
+            story
+        ).build(layoutInflater)
+
+        storyFragment = StoryFragment()
+
+        storyLayout.cover.setOnClickListener {
+            storyLayout.collapseStoryCover()
+
+            val newUserStats = createUpdatedUserStats()
+            if(newUserStats == null) {
+                return@setOnClickListener
+            }
+            else {
+                UpdateUserStatsInDatabaseThread(newUserStats).start()
+            }
+        }
+        storyLayout.setCoverImageResource(R.drawable.demo_background)
+        storyLayout.setContentFragment(storyFragment!!, supportFragmentManager)
+        storyLayout.actionButton.setImageResource(
+            if(user != null) {
+                R.drawable.ic_account_circle_32dp
+            }
+            else {
+                R.drawable.ic_sync_32dp
+            }
+        )
+        storyLayout.actionButton.setOnClickListener {
+            if(user != null) {
+                startActivity(
+                    Intent(
+                        this@MainActivity, ProfileActivity::class.java
+                    )
+                )
+            }
+            else {
+                startActivity(
+                    Intent(
+                        this@MainActivity, LoginActivity::class.java
+                    )
+                )
+            }
+        }
+
+        fragmentFrameLayout.addView(storyLayout.view)
+    }
+    
     inner class DownloadDataForUnregisteredUserThread(private val handler: Handler) : Thread() {
         private val tag = "UnregisterUserDownload"
 
@@ -339,7 +355,7 @@ class MainActivity : AppCompatActivity() {
                     todayStory = snapShot.toObject<Story>()
 
                     Firebase.storage.reference
-                        .child(todayStory!!.path_to_text!!)
+                        .child(todayStory!!.path_to_text)
                         .downloadUrl
                         .addOnSuccessListener {
                             todayStoryUrl = it.toString()
@@ -379,7 +395,7 @@ class MainActivity : AppCompatActivity() {
                             
                             todayStory = bookDocumentSnapshot.toObject<Story>()
     
-                            val reference = Firebase.storage.reference.child(todayStory!!.path_to_text!!)
+                            val reference = Firebase.storage.reference.child(todayStory!!.path_to_text)
                             reference.downloadUrl
                                 .addOnSuccessListener { uri ->
                                     todayStoryUrl = uri.toString()

@@ -85,7 +85,8 @@ class RegistrationDetailsActivity : AppCompatActivity() {
                     "last_date" to 0.toLong(),
                     "level" to 0.toLong(),
                     "streak" to 0.toLong()
-                )
+                ),
+                mutableListOf()
             )
     
             initSendUsersDetailsToDatabaseHandler()

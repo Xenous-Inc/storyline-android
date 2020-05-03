@@ -16,4 +16,7 @@
     <string name="not_fully_necessary">Заполните всю необходимую информацию</string>
     <string name="unknown_error">Произошла неизваестная ошибка</string>
     <string name="user_parcelable_key">userParcelable</string>
+    <string name="remove">Удалить</string>
+    <string name="removing_quote_success">Цитата была умпешно удалена</string>
+    <string name="removing_quote_error">Произошла ошибка во время удаления цитаты</string>
 </resources>

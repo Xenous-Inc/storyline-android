@@ -61,7 +61,7 @@ class StoryLayout(
         private set
 
 //    Свойство высоты обложки в свернутом состоянии
-    var collapsedCoverHeight = 80F.dpToPx(context)
+    var collapsedCoverHeight = 120F.dpToPx(context)
 
 //    Свойство радиуса скругления обложки в свернутом состоянии
     var collapsedCoverRadius = 30F.dpToPx(context)

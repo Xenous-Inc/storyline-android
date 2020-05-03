@@ -2,17 +2,18 @@ package com.xenous.storyline.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
+import android.content.ClipData
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.text.ClipboardManager
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -27,6 +28,7 @@ import com.xenous.storyline.data.Quote
 import com.xenous.storyline.data.User
 import com.xenous.storyline.threads.DownloadQuotesThread
 import com.xenous.storyline.threads.DownloadUserThread
+import com.xenous.storyline.threads.RemoveQuoteThread
 import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.SUCCESS_CODE
 
@@ -64,7 +66,7 @@ class ProfileActivity : AppCompatActivity() {
     }
     
     private fun updateUserInfo(user : User) {
-        userNameTextView.text = user!!.nickname
+        userNameTextView.text = user.nickname
         streakInfoTextView.text = "Вы читаете уже ${user!!.stats!!["streak"]} дней подряд"
     }
     
@@ -148,22 +150,16 @@ class ProfileActivity : AppCompatActivity() {
 
 class QuotesRecyclerViewAdapter(
     private val activity : ProfileActivity,
-    private val quotesList : List<Quote>
+    private val quotesList : MutableList<Quote>
 ) : RecyclerView.Adapter<QuotesRecyclerViewAdapter.QuotesRecyclerViewHolder>() {
     
     inner class QuotesRecyclerViewHolder(
         itemView: View) : RecyclerView.ViewHolder(itemView) {
-        lateinit var quoteTextView : TextView
-        lateinit var storyTextView : TextView
-        lateinit var authorTextView : TextView
-        lateinit var quoteCardView : CardView
-        
-        init {
-            quoteTextView = itemView.findViewById(R.id.quoteTextView)
-            storyTextView = itemView.findViewById(R.id.storyTextView)
-            authorTextView = itemView.findViewById(R.id.authorTextView)
-            quoteCardView = itemView.findViewById(R.id.quoteCardView)
-        }
+        var quoteTextView : TextView = itemView.findViewById(R.id.quoteTextView)
+        var storyTextView : TextView = itemView.findViewById(R.id.storyTextView)
+        var authorTextView : TextView = itemView.findViewById(R.id.authorTextView)
+        var quoteCardView : CardView = itemView.findViewById(R.id.quoteCardView)
+    
     }
     
     override fun onCreateViewHolder(
@@ -177,12 +173,84 @@ class QuotesRecyclerViewAdapter(
         holder.storyTextView.text = "\"" + quotesList[position].story + "\""
         holder.authorTextView.text = quotesList[position].author
         
-        holder.quoteCardView.setOnClickListener {
-            //TODO: Implements actions with quotes
+        holder.quoteCardView.setOnLongClickListener {
+            activity.startActionMode(getActionMode(quotesList[position], position))
+            
+            return@setOnLongClickListener true
         }
     }
     
     override fun getItemCount() : Int {
         return quotesList.size
+    }
+    
+    private fun getActionMode(currentQuote : Quote, quotePosition: Int) : ActionMode.Callback {
+        return object : ActionMode.Callback {
+            override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+                mode?.finish()
+                
+                when(item?.itemId) {
+                    R.id.shareItem -> {
+                        currentQuote.shareQuote(activity)
+                        
+                        return true
+                    }
+                    R.id.removeQuoteItem -> {
+                        startRemovingQuote(quotePosition)
+                        
+                        return true
+                    }
+                }
+                
+                return false
+            }
+            
+            override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                val inflater = mode?.menuInflater
+                inflater?.inflate(R.menu.quotes_action_menu, menu)
+                
+                return true
+            }
+            
+            override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                return true
+            }
+            
+            override fun onDestroyActionMode(mode: ActionMode?) {
+                mode?.finish()
+            }
+        }
+    }
+    
+    private fun startRemovingQuote(quotePosition: Int) {
+        RemoveQuoteThread(quotePosition, getRemovingQuoteHandler(quotePosition)).start()
+    }
+    
+    @SuppressLint("HandlerLeak")
+    private fun getRemovingQuoteHandler(quotePosition : Int) : Handler {
+        return object : Handler() {
+            override fun handleMessage(msg: Message) {
+                super.handleMessage(msg)
+                Log.d("Removing Quote Handler", "Message has been caught")
+                
+                when(msg.what) {
+                    SUCCESS_CODE -> {
+                        quotesList.removeAt(quotePosition)
+                        this@QuotesRecyclerViewAdapter.notifyDataSetChanged()
+                        
+                        DynamicToast.makeSuccess(
+                            activity,
+                            activity.getString(R.string.removing_quote_success)
+                        ).show()
+                    }
+                    ERROR_CODE -> {
+                        DynamicToast.makeError(
+                            activity,
+                            activity.getString(R.string.removing_quote_error)
+                        ).show()
+                    }
+                }
+            }
+        }
     }
 }

@@ -11,7 +11,7 @@ import com.xenous.storyline.utils.CANCEL_CODE
 import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.SUCCESS_CODE
 
-class DownloadQuotesThread(
+class   DownloadQuotesThread(
     private val handler: Handler
 ) : Thread() {
     

@@ -94,7 +94,12 @@ class MainActivity : AppCompatActivity() {
                 )
                 storyLayout.actionButton.setOnClickListener {
                     if(user != null) {
-                        // ToDo: inflate menu
+                        startActivity(
+                            Intent(
+                                this@MainActivity,
+                                ProfileActivity::class.java
+                            )
+                        )
                     }
                     else {
                         startActivity(

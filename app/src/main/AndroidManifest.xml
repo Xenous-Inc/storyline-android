@@ -22,6 +22,7 @@
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.QuotesActivity" />
         <activity android:name=".activities.RegistrationDetailsActivity" />
+        <activity android:name=".activities.ProfileActivity" />
 
     </application>
 </manifest>

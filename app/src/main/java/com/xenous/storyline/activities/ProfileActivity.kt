@@ -55,15 +55,6 @@ class ProfileActivity : AppCompatActivity() {
         
         fireBaseUser  = FirebaseAuth.getInstance().currentUser
         
-        try {
-            user = intent.getParcelableExtra(getString(R.string.user_parcelable_key))
-        }
-        catch(exception : NullPointerException) {
-            Log.d(TAG, "User is null")
-            
-            startActivity(Intent(this, MainActivity::class.java))
-        }
-        
         makeStatusBarTransparent()
         
         userNameTextView = findViewById(R.id.userNameTextView)

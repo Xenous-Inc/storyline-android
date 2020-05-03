@@ -85,7 +85,8 @@
             android:fontFamily="serif"
             android:text="Русская современная литература"
             android:textColor="@android:color/black"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:tag="0"/>
 
         <CheckBox
             android:id="@+id/foreignClassicLiteratureCheckbox"

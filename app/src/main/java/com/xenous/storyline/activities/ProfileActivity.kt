@@ -21,39 +21,30 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
 import com.pranavpandey.android.dynamic.toasts.DynamicToast
 import com.xenous.storyline.R
 import com.xenous.storyline.data.Quote
 import com.xenous.storyline.data.User
+import com.xenous.storyline.threads.DownloadQuotesThread
+import com.xenous.storyline.threads.DownloadUserThread
 import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.SUCCESS_CODE
-import java.lang.NullPointerException
 
 class ProfileActivity : AppCompatActivity() {
     private companion object {
         const val TAG = "Profile Activity"
     }
     
-    private var fireBaseUser : FirebaseUser? = null
-    
-    private val quotesList = arrayListOf<Quote>()
-    private var user : User? = null
-    
     private lateinit var userNameTextView : TextView
     private lateinit var streakInfoTextView : TextView
     private lateinit var quotesRecyclerView : RecyclerView
     
-    private lateinit var downloadQuotesHandler: Handler
+    private lateinit var downloadUserThread : DownloadUserThread
+    private lateinit var downloadQuotesThread: DownloadQuotesThread
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
-        
-        fireBaseUser  = FirebaseAuth.getInstance().currentUser
         
         makeStatusBarTransparent()
         
@@ -65,16 +56,16 @@ class ProfileActivity : AppCompatActivity() {
                 FirebaseAuth.getInstance().signOut()
                 startActivity(Intent(this, LoginActivity::class.java))
             }
-        updateUserInfo()
         
-        initDownloadQuotesHandler()
+        downloadUserThread = DownloadUserThread(getDownloadUserHandler())
+        downloadUserThread.start()
+        getDownloadQuotesHandler()
         
-        DownloadQuotesThread().start()
     }
     
-    private fun updateUserInfo() {
-//        userNameTextView.text = user!!.nickname
-        userNameTextView.text = "Вы читаете уже ${user!!.stats!!["streak"]} дней подряд"
+    private fun updateUserInfo(user : User) {
+        userNameTextView.text = user!!.nickname
+        streakInfoTextView.text = "Вы читаете уже ${user!!.stats!!["streak"]} дней подряд"
     }
     
     private fun setWindowFlag(activity: Activity, bits: Int, on: Boolean) {
@@ -112,61 +103,45 @@ class ProfileActivity : AppCompatActivity() {
     }
     
     @SuppressLint("HandlerLeak")
-    private fun initDownloadQuotesHandler() {
-        downloadQuotesHandler = object : Handler() {
+    private fun getDownloadQuotesHandler() : Handler {
+        return object : Handler() {
             override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
             
                 when(msg.what) {
-                    SUCCESS_CODE -> run {
+                    SUCCESS_CODE -> run<Handler, Unit> {
+                        
+                        val quotesList = downloadQuotesThread.quotesList
                         quotesRecyclerView.adapter = QuotesRecyclerViewAdapter(this@ProfileActivity, quotesList)
                         quotesRecyclerView.layoutManager = LinearLayoutManager(this@ProfileActivity)
                     }
-                    ERROR_CODE -> run {
-                        DynamicToast.makeError(this@ProfileActivity, getString(R.string.error_while_download_quotes), Toast.LENGTH_SHORT).show()
+                    ERROR_CODE -> run<Handler, Unit> {
+                        DynamicToast.makeError(this@ProfileActivity,
+                            getString(R.string.error_while_download_quotes), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
     }
     
-    inner class DownloadQuotesThread : Thread() {
-        
-        override fun run() {
-            super.run()
-            
-            Firebase
-                .firestore
-                .collection("users")
-                .document(fireBaseUser!!.uid)
-                .collection("quotes")
-                .get()
-                .addOnSuccessListener {
-                    Log.d(TAG, "Request has been managed")
-                    
-                    for(document in it.documents) {
-                        val quote = document.toObject<Quote>()
+    @SuppressLint("HandlerLeak")
+    private fun getDownloadUserHandler() : Handler {
+        return object : Handler() {
+            override fun handleMessage(msg: Message) {
+                super.handleMessage(msg)
+                Log.d(TAG, "DownloadUserHandler has caught message")
+                
+                when(msg.what) {
+                    SUCCESS_CODE -> run {
+                        val user = downloadUserThread.currentUser
+                        updateUserInfo(user!!)
                         
-                        quotesList.add(quote!!)
-                        
-                        Log.d(TAG, "Current quote's text is ${quote.text}")
+                        downloadQuotesThread = DownloadQuotesThread(getDownloadQuotesHandler())
+                        downloadQuotesThread.start()
                     }
-                    
-                    Log.d(TAG, "Quotes amount is ${quotesList.size} ")
-                    
-                    downloadQuotesHandler.sendEmptyMessage(SUCCESS_CODE)
+                    ERROR_CODE -> run{}
                 }
-                .addOnFailureListener { e ->
-                    Log.d(TAG, "Request failed")
-                    Log.d(TAG, e.toString())
-                    
-                    downloadQuotesHandler.sendEmptyMessage(ERROR_CODE)
-                }
-                .addOnCanceledListener {
-                    Log.d(TAG, "Request canceled")
-                    
-                    downloadQuotesHandler.sendEmptyMessage(ERROR_CODE)
-                }
+            }
         }
     }
 }

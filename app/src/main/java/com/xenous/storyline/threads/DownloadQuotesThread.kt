@@ -19,7 +19,7 @@ class DownloadQuotesThread(
         const val TAG = "DownloadQuotesThread"
     }
     
-    private val quotesList= mutableListOf<Quote>()
+    val quotesList= mutableListOf<Quote>()
     
     override fun run() {
         super.run()

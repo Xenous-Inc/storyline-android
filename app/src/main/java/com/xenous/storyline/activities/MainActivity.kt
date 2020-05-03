@@ -113,9 +113,6 @@ class MainActivity : AppCompatActivity() {
                             Intent(
                                 this@MainActivity,
                                 ProfileActivity::class.java
-                            ).putExtra(
-                                getString(R.string.user_parcelable_key),
-                                currentUser
                             )
                         )
                     }

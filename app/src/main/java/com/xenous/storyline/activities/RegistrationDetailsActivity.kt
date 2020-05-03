@@ -81,10 +81,10 @@ class RegistrationDetailsActivity : AppCompatActivity() {
             val user = User(
                 nameEditText.text.toString(),
                 userInterests,
-                mapOf(
-                    "last_date" to 0,
-                    "level" to 0,
-                    "streak" to 0
+                hashMapOf(
+                    "last_date" to 0.toLong(),
+                    "level" to 0.toLong(),
+                    "streak" to 0.toLong()
                 )
             )
     

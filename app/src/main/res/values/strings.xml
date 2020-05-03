@@ -15,4 +15,5 @@
     <string name="error_while_download_quotes">Произошла ошибка при загрузке цитат</string>
     <string name="not_fully_necessary">Заполните всю необходимую информацию</string>
     <string name="unknown_error">Произошла неизваестная ошибка</string>
+    <string name="user_parcelable_key">userParcelable</string>
 </resources>

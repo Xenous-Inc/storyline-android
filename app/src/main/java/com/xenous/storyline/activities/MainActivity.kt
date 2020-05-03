@@ -113,6 +113,9 @@ class MainActivity : AppCompatActivity() {
                             Intent(
                                 this@MainActivity,
                                 ProfileActivity::class.java
+                            ).putExtra(
+                                getString(R.string.user_parcelable_key),
+                                currentUser
                             )
                         )
                     }
@@ -215,7 +218,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(shareIntent)
     }
     
-    private fun createUpdatedUserStats() : Map<String, Long>? {
+    private fun createUpdatedUserStats() : HashMap<String, Long>? {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
@@ -230,7 +233,7 @@ class MainActivity : AppCompatActivity() {
         val newDate = calendar.timeInMillis
         val streak = currentUser!!.stats!!["streak"] as Long + 1
         
-        return mapOf(
+        return hashMapOf(
             "last_date" to newDate,
             "level" to newRating,
             "streak" to streak
@@ -419,7 +422,7 @@ class MainActivity : AppCompatActivity() {
     }
     
     inner class UpdateUserStatsInDatabaseThread(
-        private val userStatsMap : Map<String, Long>
+        private val userStatsMap : HashMap<String, Long>
     
     ) : Thread() {
         override fun run() {

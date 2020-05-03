@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                 storyLayout.setContentFragment(storyFragment!!, supportFragmentManager)
                 storyLayout.actionButton.setImageResource(
                     if(user != null) {
-                        R.drawable.ic_quote_32dp
+                        R.drawable.ic_account_circle_32dp
                     }
                     else {
                         R.drawable.ic_sync_32dp

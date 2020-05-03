@@ -1,12 +1,15 @@
 package com.xenous.storyline.activities
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.xenous.storyline.R
 
 class ProfileActivity : AppCompatActivity() {
@@ -15,6 +18,12 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
         
         makeStatusBarTransparent()
+        
+        findViewById<ImageButton>(R.id.imageButton)
+            .setOnClickListener {
+                FirebaseAuth.getInstance().signOut()
+                startActivity(Intent(this, LoginActivity::class.java))
+            }
     }
     
     private fun setWindowFlag(activity: Activity, bits: Int, on: Boolean) {

@@ -32,8 +32,8 @@
 
             <ImageView
                 android:id="@+id/storyCoverImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:background="?attr/selectableItemBackground"
+                android:background="@android:color/transparent"
                 android:padding="12dp"
                 android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"

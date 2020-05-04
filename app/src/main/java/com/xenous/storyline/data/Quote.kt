@@ -12,6 +12,8 @@ data class Quote(
     val story : String? = null,
     val text : String? = null
 ) {
+    
+    var quoteUID : String? = null
 
     override fun toString(): String {
         return "Book's name is $story. Story's author is $author. Quote's text is $text"

@@ -40,11 +40,13 @@ class   DownloadQuotesThread(
     
                 for(document in quotesDocumentSnapshot.documents) {
                     val quote = document.toObject<Quote>()
+                    quote!!.quoteUID = document.id
         
-                    quotesList.add(quote!!)
+                    quotesList.add(quote)
         
                     Log.d(TAG, "Current quote's text is ${quote.text}")
                 }
+                
     
                 Log.d(TAG, "Quotes amount is ${quotesList.size} ")
                 

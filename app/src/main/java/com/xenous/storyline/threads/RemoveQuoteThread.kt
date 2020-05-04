@@ -11,7 +11,7 @@ import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.SUCCESS_CODE
 
 class RemoveQuoteThread(
-    private val quoteIndex : Int,
+    private val quoteUID: String,
     private val handler: Handler
 ) : Thread() {
     
@@ -31,7 +31,7 @@ class RemoveQuoteThread(
         }
         
         Firebase.firestore.collection("users").document(firebaseUser.uid).collection("quotes")
-            .document(quoteIndex.toString())
+            .document(quoteUID)
             .delete()
             .addOnSuccessListener {
                 Log.d(TAG, "Quote has been removed successfully")

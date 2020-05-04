@@ -219,7 +219,7 @@ class QuotesRecyclerViewAdapter(
     }
     
     private fun startRemovingQuote(quotePosition: Int) {
-        RemoveQuoteThread(quotePosition, getRemovingQuoteHandler(quotePosition)).start()
+        RemoveQuoteThread(quotesList[quotePosition].quoteUID!!, getRemovingQuoteHandler(quotePosition)).start()
     }
     
     @SuppressLint("HandlerLeak")

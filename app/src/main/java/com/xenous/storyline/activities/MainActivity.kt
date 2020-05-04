@@ -303,7 +303,10 @@ class MainActivity : AppCompatActivity() {
             storyWebView
                 ?.evaluateJavascript("window.getSelection().toString()") {value ->
                     
-                    val quoteText = value.replace("\"", "")
+                    var quoteText = value
+                    quoteText = quoteText.replace("\"", "")
+                    quoteText = quoteText.replace("\n", "")
+                    
                     
                     if(quoteText.isBlank()) {
                         return@evaluateJavascript

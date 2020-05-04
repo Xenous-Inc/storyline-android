@@ -32,6 +32,7 @@ import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.SUCCESS_CODE
 import com.xenous.storyline.utils.StoryLayout
 
+
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
     private companion object {

@@ -28,6 +28,7 @@ import com.xenous.storyline.threads.RemoveQuoteThread
 import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.SUCCESS_CODE
 
+
 class ProfileActivity : AppCompatActivity() {
     private companion object {
         const val TAG = "Profile Activity"
@@ -52,7 +53,13 @@ class ProfileActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.exitImageButton)
             .setOnClickListener {
                 FirebaseAuth.getInstance().signOut()
-                startActivity(Intent(this, LoginActivity::class.java))
+                startActivity(
+                    Intent(
+                        this, LoginActivity::class.java
+                    ).setFlags(
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    )
+                )
             }
         
         oldDownloadUserThread = OldDownloadUserThread(getDownloadUserHandler())

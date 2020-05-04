@@ -9,11 +9,12 @@ import com.xenous.storyline.data.User
 import com.xenous.storyline.utils.CANCEL_CODE
 import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.QUERY_IS_EMPTY
+import com.xenous.storyline.utils.SUCCESS_CODE
 import kotlin.random.Random
 
 class DownloadRecommendedStoryThread(
     private val user: User?,
-    private val onDownloadStoryHandler: Handler
+    private val onCompleteDownloadStoryHandler: Handler
 ) : Thread() {
     
     override fun run() {
@@ -34,25 +35,33 @@ class DownloadRecommendedStoryThread(
                 if(!snapshot.isEmpty) {
                     for(storyDocument in snapshot.documents) {
                         if(storyDocument.exists() && !user.history.contains(storyDocument.id)) {
-                            val story = storyDocument.toObject(Story::class.java)
-                            if(story != null && story.tags.any {user.interests.contains(it)}) {
-                                val msg = Message.obtain()
-                                msg.obj = story
-                                onDownloadStoryHandler.sendMessage(msg)
-                                break
+                            try {
+                                val story = storyDocument.toObject(Story::class.java)
+                                if(story != null && story.tags.any {user.interests.contains(it)}) {
+                                    val msg = Message.obtain()
+                                    msg.apply {
+                                        what = SUCCESS_CODE
+                                        obj = story
+                                    }
+                                    onCompleteDownloadStoryHandler.sendMessage(msg)
+                                    break
+                                }
+                            }
+                            catch(e: ClassCastException) {
+//                                Class Cast Failed, Continue
                             }
                         }
                     }
                 }
                 else {
-                    onDownloadStoryHandler.sendEmptyMessage(QUERY_IS_EMPTY)
+                    onCompleteDownloadStoryHandler.sendEmptyMessage(QUERY_IS_EMPTY)
                 }
             }
             .addOnFailureListener {
-                onDownloadStoryHandler.sendEmptyMessage(ERROR_CODE)
+                onCompleteDownloadStoryHandler.sendEmptyMessage(ERROR_CODE)
             }
             .addOnCanceledListener {
-                onDownloadStoryHandler.sendEmptyMessage(CANCEL_CODE)
+                onCompleteDownloadStoryHandler.sendEmptyMessage(CANCEL_CODE)
             }
     }
     
@@ -68,23 +77,31 @@ class DownloadRecommendedStoryThread(
                         val storyNumber = Random.nextInt(0, snapshot.documents.size)
                         val storyDocumentSnapshot = snapshot.documents[storyNumber]
                         if(storyDocumentSnapshot.exists()) {
-                            story = storyDocumentSnapshot.toObject(Story::class.java)
+                            try {
+                                story = storyDocumentSnapshot.toObject(Story::class.java)
+                            }
+                            catch(e: ClassCastException) {
+//                                Class Cast Failed, Continue
+                            }
                         }
                     }
     
                     val msg = Message.obtain()
-                    msg.obj = story
-                    onDownloadStoryHandler.sendMessage(msg)
+                    msg.apply {
+                        what = SUCCESS_CODE
+                        obj = story
+                    }
+                    onCompleteDownloadStoryHandler.sendMessage(msg)
                 }
                 else {
-                    onDownloadStoryHandler.sendEmptyMessage(QUERY_IS_EMPTY)
+                    onCompleteDownloadStoryHandler.sendEmptyMessage(QUERY_IS_EMPTY)
                 }
             }
             .addOnFailureListener {
-                onDownloadStoryHandler.sendEmptyMessage(ERROR_CODE)
+                onCompleteDownloadStoryHandler.sendEmptyMessage(ERROR_CODE)
             }
             .addOnCanceledListener {
-                onDownloadStoryHandler.sendEmptyMessage(CANCEL_CODE)
+                onCompleteDownloadStoryHandler.sendEmptyMessage(CANCEL_CODE)
             }
     }
 }

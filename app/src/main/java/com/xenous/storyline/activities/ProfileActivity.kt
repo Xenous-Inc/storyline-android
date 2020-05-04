@@ -2,16 +2,12 @@ package com.xenous.storyline.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Dialog
-import android.content.ClipData
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.text.ClipboardManager
 import android.util.Log
 import android.view.*
 import android.widget.ImageButton
@@ -27,7 +23,7 @@ import com.xenous.storyline.R
 import com.xenous.storyline.data.Quote
 import com.xenous.storyline.data.User
 import com.xenous.storyline.threads.DownloadQuotesThread
-import com.xenous.storyline.threads.DownloadUserThread
+import com.xenous.storyline.threads.OldDownloadUserThread
 import com.xenous.storyline.threads.RemoveQuoteThread
 import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.SUCCESS_CODE
@@ -41,7 +37,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var streakInfoTextView : TextView
     private lateinit var quotesRecyclerView : RecyclerView
     
-    private lateinit var downloadUserThread : DownloadUserThread
+    private lateinit var oldDownloadUserThread : OldDownloadUserThread
     private lateinit var downloadQuotesThread: DownloadQuotesThread
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,8 +55,8 @@ class ProfileActivity : AppCompatActivity() {
                 startActivity(Intent(this, LoginActivity::class.java))
             }
         
-        downloadUserThread = DownloadUserThread(getDownloadUserHandler())
-        downloadUserThread.start()
+        oldDownloadUserThread = OldDownloadUserThread(getDownloadUserHandler())
+        oldDownloadUserThread.start()
         getDownloadQuotesHandler()
         
     }
@@ -135,7 +131,7 @@ class ProfileActivity : AppCompatActivity() {
                 
                 when(msg.what) {
                     SUCCESS_CODE -> run {
-                        val user = downloadUserThread.currentUser
+                        val user = oldDownloadUserThread.currentUser
                         updateUserInfo(user!!)
                         
                         downloadQuotesThread = DownloadQuotesThread(getDownloadQuotesHandler())

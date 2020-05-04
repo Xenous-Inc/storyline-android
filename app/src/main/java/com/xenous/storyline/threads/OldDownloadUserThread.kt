@@ -1,7 +1,6 @@
 package com.xenous.storyline.threads
 
 import android.os.Handler
-import android.os.Message
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -12,13 +11,15 @@ import com.xenous.storyline.utils.CANCEL_CODE
 import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.SUCCESS_CODE
 
-class DownloadUserThread(
+class OldDownloadUserThread(
     private val handler: Handler
 ) : Thread() {
     
     private companion object {
         const val TAG = "DownloadUserThread"
     }
+    
+    var currentUser : User? = null
     
     override fun run() {
         super.run()
@@ -27,12 +28,6 @@ class DownloadUserThread(
         
         if(firebaseUser == null) {
             Log.d(TAG, "Firebase User is null")
-            val msg = Message.obtain()
-            msg.apply {
-                what = SUCCESS_CODE
-                obj = firebaseUser
-            }
-            handler.sendMessage(msg)
             
             return
         }
@@ -41,30 +36,18 @@ class DownloadUserThread(
             .get()
             .addOnSuccessListener { userDocumentSnapshot ->
                 Log.d(TAG, "User's info has been downloaded completely")
-                try {
-                    val currentUser = userDocumentSnapshot.toObject<User>()
-                    if(currentUser != null) {
-                        val msg = Message.obtain()
-                        msg.apply {
-                            what = SUCCESS_CODE
-                            obj = currentUser
-                        }
-                        handler.sendEmptyMessage(SUCCESS_CODE)
-                    }
-                    else {
-                        handler.sendEmptyMessage(ERROR_CODE)
-                    }
-                }
-                catch(e: ClassCastException) {
-                    handler.sendEmptyMessage(ERROR_CODE)
-                }
+                currentUser = userDocumentSnapshot.toObject<User>()
+                
+                handler.sendEmptyMessage(SUCCESS_CODE)
             }
             .addOnFailureListener {
                 Log.d(TAG, "User's info downloading has been failed")
+                
                 handler.sendEmptyMessage(ERROR_CODE)
             }
             .addOnCanceledListener {
                 Log.d(TAG, "User's info downloading has been canceled")
+                
                 handler.sendEmptyMessage(CANCEL_CODE)
             }
     }

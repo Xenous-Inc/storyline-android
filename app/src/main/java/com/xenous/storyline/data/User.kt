@@ -1,12 +1,10 @@
 package com.xenous.storyline.data
 
-import android.os.Parcel
-import android.os.Parcelable
-
 data class User(
-    var nickname : String? = null,
-    var interests : MutableList<Long>? = null,
-    var stats : HashMap<String, Long>? = null
+    var nickname : String,
+    var interests : MutableList<Long>,
+    var stats : HashMap<String, Long>,
+    val history: MutableList<String>
 )  {
     
     override fun toString(): String {

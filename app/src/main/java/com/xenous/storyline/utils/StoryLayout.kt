@@ -15,13 +15,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.xenous.storyline.R
+import com.xenous.storyline.data.Story
 
 
 class StoryLayout(
     val view: View,
-    storyTitle: String,
-    storyAuthor: String,
-    storyDuration: String,
+    story: Story,
     private val context: Context
 ) {
     companion object {
@@ -35,16 +34,14 @@ class StoryLayout(
     * */
     class Builder(
         private val context: Context,
-        private val title: String,
-        private val author: String,
-        private val timeToRead: String
+        private val story: Story
     ) {
         @SuppressLint("InflateParams")
         fun build(layoutInflater: LayoutInflater) : StoryLayout {
             val view =
                 layoutInflater.inflate(R.layout.story_layout, null, false)
 
-            return StoryLayout(view, title, author, timeToRead, context)
+            return StoryLayout(view, story, context)
         }
     }
 
@@ -212,13 +209,13 @@ class StoryLayout(
     init {
         view
             .findViewById<TextView>(R.id.storyCoverTitleTextView)
-            .text = storyTitle
+            .text = story.name
         view
             .findViewById<TextView>(R.id.storyCoverAuthorTextView)
-            .text = storyAuthor
+            .text = story.author
         view
             .findViewById<TextView>(R.id.storyCoverDurationTextView)
-            .text = storyDuration
+            .text = "Читать ${story.time_to_read} минут"
     }
 
     private class Animator  (

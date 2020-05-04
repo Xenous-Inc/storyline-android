@@ -37,18 +37,14 @@ class MainActivity : AppCompatActivity() {
     private companion object {
         const val TAG = "MainActivity"
         const val QUOTE_TAG = "StoryFragment : Quote"
-        const val DOWNLOAD_TAG = "DownloadingFromDataBase"
-        const val UPDATE_USER_STATS_TAG = "UpdateStatsInDatabase"
         
         const val AVAILABLE_QUOTE_LENGTH = 35
     }
     
     private var actionMode : ActionMode? = null
     private var firebaseUser: FirebaseUser? = null
-    private val story: Story? = null
+    private var story: Story? = null
     private var storyWebView: WebView? = null
-
-    
     
     @SuppressLint("HandlerLeak")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,18 +60,22 @@ class MainActivity : AppCompatActivity() {
         actionMode = mode
         
         val menu = mode.menu
+        menu.clear()
         menuInflater.inflate(R.menu.custom_context_menu, menu)
+        
         val menuItems: MutableList<MenuItem> = ArrayList()
+        // get custom menu item
         for(i in 0 until menu.size()) {
             menuItems.add(menu.getItem(i))
         }
         menu.clear()
-        for(i in 0 until menuItems.size) {
+        // reset menu item order
+        val size = menuItems.size
+        for(i in 0 until size) {
             createMenu(menu, menuItems[i], i)
         }
-    
+        
         super.onActionModeStarted(mode)
-    
     }
     
     /*private fun createUpdatedUserStats() : HashMap<String, Long>?   {
@@ -148,6 +148,8 @@ class MainActivity : AppCompatActivity() {
             
             try {
                 val story = msg.obj as Story
+                
+                this@MainActivity.story = story
                 buildStoryLayout(story)
             }
             catch(e: ClassCastException) {
@@ -246,6 +248,8 @@ class MainActivity : AppCompatActivity() {
     
     private fun addQuoteToDatabase(story: Story, quoteText: String) {
         if(firebaseUser != null) {
+            Log.d(QUOTE_TAG, "Start adding quote to database")
+            
             val quote = Quote(story.author, story.name, quoteText)
             
             Firebase.firestore
@@ -271,8 +275,8 @@ class MainActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                 }
-                .addOnFailureListener {
-                    Log.d(QUOTE_TAG, "Quote has been failed while sending to database. The cause is ${it.cause.toString()}")
+                .addOnFailureListener { exception ->
+                    Log.d(QUOTE_TAG, "Quote has been failed while sending to database. The cause is ${exception.cause.toString()}")
         
                     DynamicToast
                         .makeError(
@@ -281,6 +285,9 @@ class MainActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                 }
+        }
+        else {
+            Log.d(QUOTE_TAG, "Add quote to database : Firebase user is null")
         }
     }
     
@@ -294,7 +301,10 @@ class MainActivity : AppCompatActivity() {
         
         menuItems.setOnMenuItemClickListener {menuItem ->
             storyWebView
-                ?.evaluateJavascript("window.getSelection().toString()") {quoteText ->
+                ?.evaluateJavascript("window.getSelection().toString()") {value ->
+                    
+                    val quoteText = value.replace("\"", "")
+                    
                     if(quoteText.isBlank()) {
                         return@evaluateJavascript
                     }
@@ -309,14 +319,19 @@ class MainActivity : AppCompatActivity() {
                         
                         return@evaluateJavascript
                     }
+                    else {
+                        Log.d(QUOTE_TAG, "The quote meets the standards")
+                    }
+                    
+                    Log.d(QUOTE_TAG, "Quotes text is $quoteText")
                     
                     when(menuItem.itemId) {
                         R.id.addToQuotesItem -> if(story != null) {
-                            addQuoteToDatabase(story, quoteText)
+                            addQuoteToDatabase(story!!, quoteText)
                         }
                         R.id.copyItem        -> Quote(text = quoteText).copyToClipBoard(this)
                         R.id.shareItem       -> if(story != null) {
-                            Quote(story.author, story.name, quoteText)
+                            Quote(story!!.author, story!!.name, quoteText).shareQuote(this)
                         }
                     }
                 }

@@ -2,16 +2,17 @@ package com.xenous.storyline.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.*
+import android.os.Handler
+import android.os.Message
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import com.xenous.storyline.R
-import com.xenous.storyline.activities.MainActivity
 
 
-class StoryFragment : Fragment() {
-    
-    lateinit var storyWebView : WebView
+class StoryFragment(val onViewLoadedHandler: Handler) : Fragment() {
     
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,18 +22,17 @@ class StoryFragment : Fragment() {
         return inflater.inflate(R.layout.story_fragment_layout, container, false)
     }
     
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        storyWebView = view.findViewById(R.id.storyWebView)
+        val storyWebView = view.findViewById<WebView>(R.id.storyWebView)
         
-        val url = (activity) as MainActivity
-
-        storyWebView.loadUrl(url.todayStoryUrl)
+        val msg = Message.obtain()
+        msg.obj = storyWebView
+        onViewLoadedHandler.sendMessage(msg)
         
         storyWebView.isLongClickable = false
-      
         storyWebView.settings.javaScriptEnabled = true
     }
 }

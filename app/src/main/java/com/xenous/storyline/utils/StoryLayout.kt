@@ -140,6 +140,8 @@ class StoryLayout(
     
 //    Метод скрытия обложки при скроллинге указанного View
     fun hideCoverOnScroll(view: View) {
+//    ToDo: доработать скрытие, оно убогое
+    
         val storyContentFrameLayout = this@StoryLayout.view
             .findViewById<FrameLayout>(R.id.storyContentFrameLayout)
         

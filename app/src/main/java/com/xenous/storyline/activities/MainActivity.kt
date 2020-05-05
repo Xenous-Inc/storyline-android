@@ -247,6 +247,7 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun updateUserStats() {
+    
     }
     
     private fun addQuoteToDatabase(story: Story, quoteText: String) {

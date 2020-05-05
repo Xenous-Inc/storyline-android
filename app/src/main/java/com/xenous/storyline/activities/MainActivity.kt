@@ -2,6 +2,7 @@ package com.xenous.storyline.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -21,6 +22,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.pranavpandey.android.dynamic.toasts.DynamicToast
 import com.xenous.storyline.R
+import com.xenous.storyline.data.CurrentStory
 import com.xenous.storyline.data.Quote
 import com.xenous.storyline.data.Story
 import com.xenous.storyline.data.User
@@ -31,6 +33,8 @@ import com.xenous.storyline.utils.CANCEL_CODE
 import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.SUCCESS_CODE
 import com.xenous.storyline.utils.StoryLayout
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 @Suppress("DEPRECATION")
@@ -80,33 +84,6 @@ class MainActivity : AppCompatActivity() {
         super.onActionModeStarted(mode)
     }
     
-    /*private fun createUpdatedUserStats() : HashMap<String, Long>?   {
-        if(currentUser != null) {
-            val calendar = Calendar.getInstance()
-            calendar.timeInMillis = System.currentTimeMillis()
-            calendar.set(Calendar.HOUR_OF_DAY, 0)
-    
-            //TODO: Solve problem with matching time
-            if(calendar.timeInMillis == currentUser!!.stats!!["last_date"] as Long) {
-                return null
-            }
-    
-            val newRating : Long = 0 //This param is for update rating TODO: add rating logic
-            val newDate = calendar.timeInMillis
-            val streak = currentUser!!.stats["streak"] as Long + 1
-    
-            return hashMapOf(
-                "last_date" to newDate,
-                "level" to newRating,
-                "streak" to streak
-            )
-        }
-        else {
-            return null
-        }
-    }*/
-    
-    
     /*
     * Handler, that will be called after User was downloaded
     * It will start DownloadRecommendedStoryThread
@@ -123,6 +100,7 @@ class MainActivity : AppCompatActivity() {
                         
                         DownloadRecommendedStoryThread(
                             currentUser,
+                            applicationContext,
                             getOnCompleteDownloadStoryHandler()
                         ).start()
                     }
@@ -151,8 +129,8 @@ class MainActivity : AppCompatActivity() {
             
             try {
                 val story = msg.obj as Story
-                
                 this@MainActivity.story = story
+                updateCurrentStory()
                 buildStoryLayout(story)
             }
             catch(e: ClassCastException) {
@@ -228,21 +206,36 @@ class MainActivity : AppCompatActivity() {
                 
                 updateUserStats()
             }
-    
         }
         
         val fragmentFrameLayout = findViewById<FrameLayout>(R.id.fragmentFrameLayout)
         fragmentFrameLayout.addView(storyLayout.view)
     }
 
+    @SuppressLint("CommitPrefEdits")
+    private fun updateCurrentStory() {
+        if(firebaseUser != null && currentUser != null) {
+            if(story != null && story!!.uid != null) {
+                val currentStory = CurrentStory(story!!.uid, Date().time)
+                Firebase.firestore
+                    .collection("users")
+                    .document(firebaseUser!!.uid)
+                    .update("currentStory", currentStory)
+            }
+        }
+        else {
+            if(story != null && story!!.uid != null) {
+                val sharedPreferences =
+                    getSharedPreferences(getString(R.string.preferences_name), Context.MODE_PRIVATE)
+                sharedPreferences.edit()
+                    .putString(getString(R.string.preferences_last_book), story!!.uid)
+                    .putLong(getString(R.string.preferences_date_of_last_reading), Date().time)
+                    .apply()
+            }
+        }
+    }
+    
     private fun addBookToHistory() {
-        /*if(story != null && story?.uid != null) {
-            val sharedPreferences =
-                getSharedPreferences(getString(R.string.preferences_name), Context.MODE_PRIVATE)
-            sharedPreferences.edit()
-                .putString(getString(R.string.preferences_last_book), story?.uid)
-                .putLong(getString(R.string.preferences_date_of_last_reading), )
-        }*/
     }
     
     private fun updateUserStats() {

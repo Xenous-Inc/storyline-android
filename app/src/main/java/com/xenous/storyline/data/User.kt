@@ -4,7 +4,8 @@ data class User(
     var nickname : String = "Username",
     var interests : MutableList<Long> = mutableListOf(),
     var stats : HashMap<String, Long> = hashMapOf("last_date" to 0L, "level" to 0L, "streak" to 0L),
-    val history: MutableList<String> = mutableListOf()
+    val history: MutableList<String> = mutableListOf(),
+    val currentStory: CurrentStory? = null
 )  {
     
     override fun toString(): String {

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.text.ClipboardManager
-import androidx.core.content.ContextCompat.startActivity
 
 data class Quote(
     val author : String? = null,

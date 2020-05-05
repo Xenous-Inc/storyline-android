@@ -1,7 +1,13 @@
 package com.xenous.storyline.utils
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import android.util.DisplayMetrics
+import androidx.annotation.RequiresApi
+import com.xenous.storyline.broadcasts.NotificationBroadcastReceiver
 import java.util.*
 
 const val ERROR_CODE = 9000
@@ -39,4 +45,21 @@ fun Long.isDayBefore(anotherLong: Long) =
 fun Long.isInSameDay(anotherLong: Long) =
     getTimeInMillisAtZeroHours(this) ==
             getTimeInMillisAtZeroHours(anotherLong)
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun createNotificationChannel(context: Context) {
+    val name: CharSequence = "StoryLine Notification Channel"
+    val description = "Notification channel for Lett Reminder"
+    val importance = NotificationManager.IMPORTANCE_DEFAULT
+    val channel = NotificationChannel(NotificationBroadcastReceiver.NOTIFICATION_ID_KEY, name, importance)
+    channel.enableLights(true)
+    channel.enableVibration(true)
+    channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+    channel.description = description
+    
+    val notificationManager: NotificationManager = context.getSystemService(
+        NotificationManager::class.java
+    )!!
+    notificationManager.createNotificationChannel(channel)
+}
             

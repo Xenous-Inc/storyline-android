@@ -29,10 +29,7 @@ import com.xenous.storyline.data.User
 import com.xenous.storyline.fragments.StoryFragment
 import com.xenous.storyline.threads.DownloadRecommendedStoryThread
 import com.xenous.storyline.threads.DownloadUserThread
-import com.xenous.storyline.utils.CANCEL_CODE
-import com.xenous.storyline.utils.ERROR_CODE
-import com.xenous.storyline.utils.SUCCESS_CODE
-import com.xenous.storyline.utils.StoryLayout
+import com.xenous.storyline.utils.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -235,11 +232,50 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
-    private fun addBookToHistory() {
-    }
-    
     private fun updateUserStats() {
     
+        if(currentUser == null) {
+            Log.d(TAG, "UpdateUserStats : Current user is null")
+        
+            return
+        }
+    
+        val isDateAfter = getTimeInMillisAtZeroHours(System.currentTimeMillis()) > currentUser!!.stats["last_date"]!!
+    
+        if(isDateAfter) {
+            Log.d(TAG, "UpdateUserStats : Current user is null")
+        
+            val rating: Long = 0 // ToDO: add rating logic
+            var streak =
+                if(
+                    getTimeInMillisAtZeroHours(System.currentTimeMillis()) - currentUser!!.stats["last_date"]!! > MILLIS_IN_DAY
+                ) { currentUser!!.stats["streak"]!! }
+                else { 0 }
+        
+            streak += 1
+        
+            val newUser = currentUser!!
+            newUser.history.add(story!!.uid!!)
+            newUser.stats = hashMapOf(
+                "last_date" to getTimeInMillisAtZeroHours(System.currentTimeMillis()),
+                "level" to rating,
+                "streak" to streak
+            )
+        
+            Firebase.firestore.collection("users").document(firebaseUser!!.uid)
+                .set(
+                    newUser
+                )
+                .addOnSuccessListener {
+                    Log.d(TAG, "UpdateUserStats : User's info has been updated successfully")
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(TAG, "UpdateUserStats : User's info updating has been failed. The cause is ${exception.cause}")
+                }
+                .addOnCanceledListener {
+                    Log.d(TAG, "UpdateUserStats : User's info updating has been canceled")
+                }
+        }
     }
     
     private fun addQuoteToDatabase(story: Story, quoteText: String) {

@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     
     private var actionMode : ActionMode? = null
     private var firebaseUser: FirebaseUser? = null
+    private var currentUser: User? = null
     private var story: Story? = null
     private var storyWebView: WebView? = null
     
@@ -118,7 +119,8 @@ class MainActivity : AppCompatActivity() {
             when(msg.what) {
                 SUCCESS_CODE -> {
                     if(msg.obj == null || msg.obj is User) {
-                        val currentUser = msg.obj as User?
+                        currentUser = msg.obj as User?
+                        
                         DownloadRecommendedStoryThread(
                             currentUser,
                             getOnCompleteDownloadStoryHandler()
@@ -223,7 +225,8 @@ class MainActivity : AppCompatActivity() {
             }
             cover.setOnClickListener {
                 storyLayout.collapseStoryCover()
-//            ToDo: Update user's stats
+                
+                updateUserStats()
                 /*val newUserStats = createUpdatedUserStats()
                 if(newUserStats == null) {
                     return@setOnClickListener
@@ -244,7 +247,6 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun updateUserStats() {
-//        ToDo: realize this method
     }
     
     private fun addQuoteToDatabase(story: Story, quoteText: String) {

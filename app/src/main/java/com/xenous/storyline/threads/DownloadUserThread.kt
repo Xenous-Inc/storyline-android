@@ -30,7 +30,7 @@ class DownloadUserThread(
             val msg = Message.obtain()
             msg.apply {
                 what = SUCCESS_CODE
-                obj = firebaseUser
+                obj = null
             }
             handler.sendMessage(msg)
             
@@ -49,7 +49,7 @@ class DownloadUserThread(
                             what = SUCCESS_CODE
                             obj = currentUser
                         }
-                        handler.sendEmptyMessage(SUCCESS_CODE)
+                        handler.sendMessage(msg)
                     }
                     else {
                         handler.sendEmptyMessage(ERROR_CODE)

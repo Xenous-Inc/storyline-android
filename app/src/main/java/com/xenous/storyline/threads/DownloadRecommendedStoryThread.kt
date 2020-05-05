@@ -38,6 +38,7 @@ class DownloadRecommendedStoryThread(
                             try {
                                 val story = storyDocument.toObject(Story::class.java)
                                 if(story != null && story.tags.any {user.interests.contains(it)}) {
+                                    story.uid = storyDocument.id
                                     val msg = Message.obtain()
                                     msg.apply {
                                         what = SUCCESS_CODE

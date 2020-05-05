@@ -227,13 +227,6 @@ class MainActivity : AppCompatActivity() {
                 storyLayout.collapseStoryCover()
                 
                 updateUserStats()
-                /*val newUserStats = createUpdatedUserStats()
-                if(newUserStats == null) {
-                    return@setOnClickListener
-                }
-                else {
-                    UpdateUserStatsInDatabaseThread(newUserStats).start()
-                }*/
             }
     
         }
@@ -243,7 +236,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addBookToHistory() {
-//        ToDo: realize this method to get correct book
+        /*if(story != null && story?.uid != null) {
+            val sharedPreferences =
+                getSharedPreferences(getString(R.string.preferences_name), Context.MODE_PRIVATE)
+            sharedPreferences.edit()
+                .putString(getString(R.string.preferences_last_book), story?.uid)
+                .putLong(getString(R.string.preferences_date_of_last_reading), )
+        }*/
     }
     
     private fun updateUserStats() {

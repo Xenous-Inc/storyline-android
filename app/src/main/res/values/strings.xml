@@ -19,4 +19,9 @@
     <string name="remove">Удалить</string>
     <string name="removing_quote_success">Цитата была умпешно удалена</string>
     <string name="removing_quote_error">Произошла ошибка во время удаления цитаты</string>
+
+    <!-- Shared Preferences -->
+    <string name="preferences_name">storyLineSharedPreferences</string>
+    <string name="preferences_last_book">lastBook</string>
+    <string name="preferences_date_of_last_reading">dateOfLastReading</string>
 </resources>

@@ -27,6 +27,7 @@ import com.xenous.storyline.threads.OldDownloadUserThread
 import com.xenous.storyline.threads.RemoveQuoteThread
 import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.SUCCESS_CODE
+import com.xenous.storyline.utils.StoryLineDialog
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -52,14 +53,28 @@ class ProfileActivity : AppCompatActivity() {
         quotesRecyclerView = findViewById(R.id.quotesRecyclerView)
         findViewById<ImageButton>(R.id.exitImageButton)
             .setOnClickListener {
-                FirebaseAuth.getInstance().signOut()
-                startActivity(
-                    Intent(
-                        this, LoginActivity::class.java
-                    ).setFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    )
+                val storyLineDialog = StoryLineDialog(this)
+                storyLineDialog.messageText = getString(R.string.exit_from_account_message)
+                storyLineDialog.positiveText = getString(R.string.yes)
+                storyLineDialog.setPositiveClickListener(
+                    View.OnClickListener {
+                        FirebaseAuth.getInstance().signOut()
+                        startActivity(
+                            Intent(
+                                this, LoginActivity::class.java
+                            ).setFlags(
+                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            )
+                        )
+                        
+                        storyLineDialog.cancel()
+                    }
                 )
+                storyLineDialog.negativeText = getString(R.string.no)
+                storyLineDialog.setNegativeClickListener(View.OnClickListener {
+                    storyLineDialog.cancel()
+                })
+                storyLineDialog.show()
             }
         
         oldDownloadUserThread = OldDownloadUserThread(getDownloadUserHandler())

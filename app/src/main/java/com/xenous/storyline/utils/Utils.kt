@@ -49,13 +49,11 @@ fun Long.isInSameDay(anotherLong: Long) =
 @RequiresApi(Build.VERSION_CODES.O)
 fun createNotificationChannel(context: Context) {
     val name: CharSequence = "StoryLine Notification Channel"
-    val description = "Notification channel for Lett Reminder"
     val importance = NotificationManager.IMPORTANCE_DEFAULT
     val channel = NotificationChannel(NotificationBroadcastReceiver.NOTIFICATION_ID_KEY, name, importance)
     channel.enableLights(true)
     channel.enableVibration(true)
     channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-    channel.description = description
     
     val notificationManager: NotificationManager = context.getSystemService(
         NotificationManager::class.java

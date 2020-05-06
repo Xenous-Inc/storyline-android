@@ -34,9 +34,7 @@ class NotificationService: Service() {
         }
     }
     
-    override fun onBind(intent: Intent): IBinder {
-        TODO("Return the communication channel to the service.")
-    }
+    override fun onBind(intent: Intent): IBinder? { return null }
     
     private fun startAlarm() {
         val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -46,7 +44,7 @@ class NotificationService: Service() {
         calendar[Calendar.HOUR_OF_DAY] = 12
         calendar[Calendar.MINUTE] = 0
     
-        val myIntent: Intent = Intent(this, NotificationBroadcastReceiver::class.java)
+        val myIntent = Intent(this, NotificationBroadcastReceiver::class.java)
         pendingIntent =
             PendingIntent.getBroadcast(this, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     

@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
                     if(msg.obj == null || msg.obj is User) {
                         currentUser = msg.obj as User?
                         
-                        if(currentUser!!.interests.isEmpty()) {
+                        if(currentUser != null && currentUser!!.interests.isEmpty()) {
                             Log.d(TAG, "User's interests are empty")
                             
                             startActivity(

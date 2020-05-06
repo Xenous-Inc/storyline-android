@@ -61,7 +61,7 @@ class ProfileActivity : AppCompatActivity() {
                         FirebaseAuth.getInstance().signOut()
                         startActivity(
                             Intent(
-                                this, LoginActivity::class.java
+                                this, MainActivity::class.java
                             ).setFlags(
                                 Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             )

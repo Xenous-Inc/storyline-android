@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
@@ -52,7 +53,13 @@ class StoryLayout(
 //    Кнопка в правом верхнем углу
     val actionButton: ImageButton =
         view.findViewById(R.id.storyCoverActionImageButton)
-
+    
+//    Смещение заголовка по вертикали
+    var coverTitleVerticalBias: Float = 0.5F
+        set(value) {
+            field = if(value>=1) 1F else if(value <= 0) 0F else value
+        }
+    
 //    Поле свернутости обложки
     var isCollapsed = false
         private set
@@ -83,54 +90,56 @@ class StoryLayout(
 //    Метод сворачивания обложки
     fun collapseStoryCover() {
         if(!isCollapsed) {
-            val storyCoverTitleTextView =
+            val coverTitleTextView =
                 view.findViewById<TextView>(R.id.storyCoverTitleTextView)
-            val storyContentFrameLayout =
+            val contentFrameLayout =
                 view.findViewById<FrameLayout>(R.id.storyContentFrameLayout)
-            val storyCoverSubtitleLinearLayout =
+            val coverSubtitleLinearLayout =
                 view.findViewById<LinearLayout>(R.id.storyCoverSubtitleLinearLayout)
 
             val coverHeightInPx = cover.measuredHeight.toFloat()
             val coverWidthInPx = cover.measuredWidth.toFloat()
 
             val coverVerticalShift = coverHeightInPx - collapsedCoverHeight
-            val actionVerticalSift = coverVerticalShift +
+            val actionVerticalShift = coverVerticalShift +
                     (collapsedCoverHeight - actionButton.measuredHeight) / 2 -
                     24.dpToPx(context)
-            val titleVerticalShift = coverVerticalShift/2
+            val titleVerticalShift =
+                (cover.measuredHeight - coverTitleTextView.measuredHeight) * (1-coverTitleVerticalBias) -
+                        (collapsedCoverHeight - coverTitleTextView.measuredHeight) / 2
             val titleHorizontalShift =
-                (coverWidthInPx - storyCoverTitleTextView.measuredWidth) / 2 -
-                        collapsedCoverRadius
+                (coverWidthInPx - coverTitleTextView.measuredWidth - collapsedCoverRadius) / 2
+                
             
             run {
                 val storyContentLayoutParams =
-                    storyContentFrameLayout.layoutParams as ConstraintLayout.LayoutParams
+                    contentFrameLayout.layoutParams as ConstraintLayout.LayoutParams
                 
-                storyContentFrameLayout.layoutParams =
+                contentFrameLayout.layoutParams =
                     storyContentLayoutParams
                         .apply {
-                            height = storyContentFrameLayout.measuredHeight - collapsedCoverHeight.toInt()
+                            height = contentFrameLayout.measuredHeight - collapsedCoverHeight.toInt()
                         }
             }
             
             run {
-                storyContentFrameLayout.translationY = coverHeightInPx
+                contentFrameLayout.translationY = coverHeightInPx
 
                 Animator(cover, context, collapsingAnimationDuration)
                     .moveVerticallyTo(-coverVerticalShift)
                     .setRadiusTo(collapsedCoverRadius)
                 
                 Animator(actionButton, context, collapsingAnimationDuration)
-                    .moveVerticallyTo(actionVerticalSift)
+                    .moveVerticallyTo(actionVerticalShift)
 
-                Animator(storyCoverTitleTextView, context, collapsingAnimationDuration)
+                Animator(coverTitleTextView, context, collapsingAnimationDuration)
                     .moveVerticallyTo(titleVerticalShift)
                     .moveHorizontallyTo(-titleHorizontalShift)
 
-                Animator(storyContentFrameLayout, context, collapsingAnimationDuration)
+                Animator(contentFrameLayout, context, collapsingAnimationDuration)
                     .moveVerticallyTo(-coverVerticalShift)
 
-                Animator(storyCoverSubtitleLinearLayout, context, collapsingAnimationDuration/2)
+                Animator(coverSubtitleLinearLayout, context, collapsingAnimationDuration/2)
                     .setAlphaTo(0F)
             }
 
@@ -219,6 +228,28 @@ class StoryLayout(
         view
             .findViewById<TextView>(R.id.storyCoverDurationTextView)
             .text = "Читать ${story.time_to_read} минут"
+        
+        /*
+        * Add OnAttachToViewListener
+        * It helps us to wait for view to be attached
+        * so we can get measuredHeight and set title translationY
+        * */
+        view.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                view.findViewById<TextView>(R.id.storyCoverTitleTextView)
+                    .apply {
+                        translationY +=
+                            (cover.measuredHeight - this.measuredHeight) * coverTitleVerticalBias
+                    }
+                view.findViewById<LinearLayout>(R.id.storyCoverSubtitleLinearLayout)
+                    .apply {
+                        translationY +=
+                            (cover.measuredHeight - this.measuredHeight) * coverTitleVerticalBias
+                    }
+                
+                view.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
     }
 
     private class Animator  (

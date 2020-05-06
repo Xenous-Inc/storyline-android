@@ -103,6 +103,19 @@ class MainActivity : AppCompatActivity() {
                     if(msg.obj == null || msg.obj is User) {
                         currentUser = msg.obj as User?
                         
+                        if(currentUser!!.interests.isEmpty()) {
+                            Log.d(TAG, "User's interests are empty")
+                            
+                            startActivity(
+                                Intent(
+                                    this@MainActivity,
+                                    RegistrationDetailsActivity::class.java
+                                ).setFlags(
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                )
+                            )
+                        }
+                        
                         DownloadRecommendedStoryThread(
                             currentUser,
                             applicationContext,

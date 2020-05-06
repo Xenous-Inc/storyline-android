@@ -24,4 +24,7 @@
     <string name="preferences_name">storyLineSharedPreferences</string>
     <string name="preferences_last_book">lastBook</string>
     <string name="preferences_date_of_last_reading">dateOfLastReading</string>
+    <string name="exit_from_account_message">Вы уверены, что хотите выйти из аккаунта?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 </resources>

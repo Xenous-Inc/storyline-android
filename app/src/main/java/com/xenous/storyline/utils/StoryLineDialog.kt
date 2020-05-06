@@ -26,6 +26,7 @@ class StoryLineDialog(
     
     init {
         dialog.setContentView(LAYOUT)
+        makeBackgroundTransparent()
         
         confirmMessageTextView = dialog.findViewById(R.id.confirmMessageTextView)
         confirmNoTextView = dialog.findViewById(R.id.confirmNoTextView)

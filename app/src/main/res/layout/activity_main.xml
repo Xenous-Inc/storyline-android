@@ -6,15 +6,4 @@
     android:layout_height="match_parent"
     android:background="@color/bookColor"
     android:orientation="vertical"
-    tools:context=".activities.MainActivity">
-
-    <TextView
-        android:id="@+id/authTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/auth"
-        android:textColor="@android:color/white"
-        android:textSize="23sp"
-        android:layout_gravity="end"/>
-
-</FrameLayout>
+    tools:context=".activities.MainActivity"/>

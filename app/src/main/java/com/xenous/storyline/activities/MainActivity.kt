@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +14,7 @@ import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.firestore
@@ -167,12 +167,10 @@ class MainActivity : AppCompatActivity() {
     
     @SuppressLint("HandlerLeak")
     private fun buildStoryLayout(story: Story) {
-        
         val storyLayout = StoryLayout.Builder(this, story).build(layoutInflater)
         val storyFragment = StoryFragment(getOnCompleteLoadStoryFragment(story, storyLayout))
-        
         storyLayout.apply {
-            setCoverImageResource(R.drawable.demo_background)
+            setCoverImageResource(R.drawable.profile_header_six)
             setContentFragment(storyFragment, supportFragmentManager)
             actionButton.setImageResource(
                 if(firebaseUser != null) {
@@ -407,7 +405,7 @@ class MainActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 false
             )
-            window.statusBarColor = Color.TRANSPARENT
+            window.statusBarColor = ContextCompat.getColor(this, R.color.blackTranparentColor)
         }
     }
 }

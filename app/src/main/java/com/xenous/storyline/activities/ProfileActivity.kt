@@ -3,7 +3,6 @@ package com.xenous.storyline.activities
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -70,7 +70,7 @@ class ProfileActivity : AppCompatActivity() {
     
     private fun updateUserInfo(user : User) {
         userNameTextView.text = user.nickname
-        streakInfoTextView.text = "Вы читаете уже ${user!!.stats!!["streak"]} дней подряд"
+        streakInfoTextView.text = "Вы читаете уже ${user.stats["streak"]} дней подряд"
     }
     
     private fun setWindowFlag(activity: Activity, bits: Int, on: Boolean) {
@@ -103,7 +103,7 @@ class ProfileActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 false
             )
-            window.statusBarColor = Color.TRANSPARENT
+            window.statusBarColor = ContextCompat.getColor(this, R.color.blackTranparentColor)
         }
     }
     

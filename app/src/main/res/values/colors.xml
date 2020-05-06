@@ -5,6 +5,7 @@
     <color name="colorAccent">@android:color/darker_gray</color>
 
     <color name="bookColor">#f6f5f0</color>
+    <color name="blackTranparentColor">#3F000000</color>
 
     <color name="colorBackground">#F2F2E8</color>
 </resources>

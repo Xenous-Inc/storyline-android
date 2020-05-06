@@ -7,9 +7,7 @@ data class User(
     val history: MutableList<String> = mutableListOf(),
     val currentStory: CurrentStory? = null
 )  {
-    
     override fun toString(): String {
         return "User's name is $nickname. \n User's interests are $interests. User's last date is $stats"
     }
-    
 }

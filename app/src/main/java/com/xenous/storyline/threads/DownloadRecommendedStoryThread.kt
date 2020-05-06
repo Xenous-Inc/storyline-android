@@ -30,6 +30,7 @@ class DownloadRecommendedStoryThread(
     }
     
     private fun getStoryForRegisteredUser(user: User) {
+//        If currentStory exists, load book from here
         if(
             user.currentStory != null &&
             user.currentStory.isNotEmpty() &&
@@ -69,24 +70,33 @@ class DownloadRecommendedStoryThread(
                     onCompleteDownloadStoryHandler.sendEmptyMessage(CANCEL_CODE)
                 }
         }
+//        If currentStory doesn't exist, load new book
         else {
             Firebase.firestore
                 .collection("books").get()
-                .addOnSuccessListener {snapshot ->
-                    if(!snapshot.isEmpty) {
+                .addOnSuccessListener {querySnapshot ->
+                    if(!querySnapshot.isEmpty) {
                         var storyDocumentSnapshot: DocumentSnapshot? = null
                         var story: Story? = null
                         
                         while(storyDocumentSnapshot == null || story == null) {
-                            val storyNumber = Random.nextInt(0, snapshot.documents.size)
-                            storyDocumentSnapshot = snapshot.documents[storyNumber]
+                            val storyNumber = Random.nextInt(0, querySnapshot.documents.size)
+                            storyDocumentSnapshot = querySnapshot.documents[storyNumber]
                             
-                            if(storyDocumentSnapshot.exists()) {
+                            if(
+                                storyDocumentSnapshot.exists() &&
+                                !user.history.contains(storyDocumentSnapshot.id)
+                            ) {
                                 try {
                                     story = storyDocumentSnapshot.toObject(Story::class.java)
+                                    if(story != null) {
+                                        if(!story.tags.any { user.interests.contains(it) }) {
+                                            story = null
+                                        }
+                                    }
                                 }
                                 catch(e: ClassCastException) {
-//                                Class Cast Failed, Continue
+                                    story = null
                                 }
                             }
                         }
@@ -120,7 +130,8 @@ class DownloadRecommendedStoryThread(
             sharedPreferences.getLong(context.getString(R.string.preferences_date_of_last_reading), PREFERENCE_NOT_FOUND)
         val currentStoryUid =
             sharedPreferences.getString(context.getString(R.string.preferences_last_book), null)
-        
+
+//        If currentStory exists, load book from here
         if(
             currentStoryUid != null &&
             currentStoryCreationTime != PREFERENCE_NOT_FOUND &&
@@ -160,6 +171,7 @@ class DownloadRecommendedStoryThread(
                     onCompleteDownloadStoryHandler.sendEmptyMessage(CANCEL_CODE)
                 }
         }
+//        If currentStory doesn't exist, load new book
         else {
             Firebase.firestore
                 .collection("books")
@@ -177,7 +189,7 @@ class DownloadRecommendedStoryThread(
                                     story = storyDocumentSnapshot.toObject(Story::class.java)
                                 }
                                 catch(e: ClassCastException) {
-//                                Class Cast Failed, Continue
+                                    story = null
                                 }
                             }
                         }

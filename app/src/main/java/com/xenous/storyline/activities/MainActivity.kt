@@ -170,6 +170,7 @@ class MainActivity : AppCompatActivity() {
         val storyLayout = StoryLayout.Builder(this, story).build(layoutInflater)
         val storyFragment = StoryFragment(getOnCompleteLoadStoryFragment(story, storyLayout))
         storyLayout.apply {
+            coverTitleVerticalBias = 0.4F
             setCoverImageResource(R.drawable.profile_header_six)
             setContentFragment(storyFragment, supportFragmentManager)
             actionButton.setImageResource(

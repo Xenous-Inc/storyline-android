@@ -43,8 +43,8 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         createAccountTextView.setOnClickListener {
-            if(passwordEditText.text == repeatPasswordEditText.text) {
-                if(isFieldsEmpty()) {
+            if(passwordEditText.text.toString() == repeatPasswordEditText.text.toString()) {
+                if(areFieldsEmpty()) {
                     Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show()
                 }
                 else {
@@ -70,7 +70,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun isFieldsEmpty() : Boolean {
+    private fun areFieldsEmpty() : Boolean {
         if(emailEditText.text.isBlank() || passwordEditText.text.isBlank() || repeatPasswordEditText.text.isBlank()) {
             return true
         }

@@ -14,8 +14,9 @@ const val ERROR_CODE = 9000
 const val SUCCESS_CODE = 9001
 const val CANCEL_CODE = 9002
 const val QUERY_IS_EMPTY = 9003
-const val MILLIS_IN_DAY = 86400000
+const val DOCUMENT_DOES_NOT_EXIST = 9004
 const val PREFERENCE_NOT_FOUND = -3718L
+const val MILLIS_IN_DAY = 86400000
 
 fun Int.dpToPx(context: Context): Int =
     this * (context.resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)

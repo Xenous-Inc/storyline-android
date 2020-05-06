@@ -127,6 +127,16 @@ class MainActivity : AppCompatActivity() {
 //                            ToDo: Notify User about yet another error
                     }
                 }
+                DOCUMENT_DOES_NOT_EXIST -> {
+                    startActivity(
+                        Intent(
+                            this@MainActivity,
+                            RegistrationDetailsActivity::class.java
+                        ).setFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        )
+                    )
+                }
                 ERROR_CODE -> {
 //                        ToDo: Notify User about yet another error
                 }

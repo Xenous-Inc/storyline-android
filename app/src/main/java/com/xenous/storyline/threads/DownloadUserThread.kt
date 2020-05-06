@@ -9,6 +9,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.xenous.storyline.data.User
 import com.xenous.storyline.utils.CANCEL_CODE
+import com.xenous.storyline.utils.DOCUMENT_DOES_NOT_EXIST
 import com.xenous.storyline.utils.ERROR_CODE
 import com.xenous.storyline.utils.SUCCESS_CODE
 
@@ -40,23 +41,28 @@ class DownloadUserThread(
         Firebase.firestore.collection("users").document(firebaseUser.uid)
             .get()
             .addOnSuccessListener { userDocumentSnapshot ->
-                Log.d(TAG, "User's info has been downloaded completely")
-                try {
-                    val currentUser = userDocumentSnapshot.toObject<User>()
-                    if(currentUser != null) {
-                        val msg = Message.obtain()
-                        msg.apply {
-                            what = SUCCESS_CODE
-                            obj = currentUser
+                if(userDocumentSnapshot.exists()) {
+                    Log.d(TAG, "User's info has been downloaded completely")
+                    try {
+                        val currentUser = userDocumentSnapshot.toObject<User>()
+                        if(currentUser != null) {
+                            val msg = Message.obtain()
+                            msg.apply {
+                                what = SUCCESS_CODE
+                                obj = currentUser
+                            }
+                            handler.sendMessage(msg)
                         }
-                        handler.sendMessage(msg)
+                        else {
+                            handler.sendEmptyMessage(ERROR_CODE)
+                        }
                     }
-                    else {
+                    catch(e: ClassCastException) {
                         handler.sendEmptyMessage(ERROR_CODE)
                     }
                 }
-                catch(e: ClassCastException) {
-                    handler.sendEmptyMessage(ERROR_CODE)
+                else {
+                    handler.sendEmptyMessage(DOCUMENT_DOES_NOT_EXIST)
                 }
             }
             .addOnFailureListener {

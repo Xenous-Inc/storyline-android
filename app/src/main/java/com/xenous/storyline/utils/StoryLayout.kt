@@ -169,6 +169,7 @@ class StoryLayout(
                     .moveVerticallyTo(-collapsedCoverHeight)
                 Animator(storyContentFrameLayout, context, hidingAnimationDuration)
                     .moveVerticallyTo(-collapsedCoverHeight)
+                    .heightTo(collapsedCoverHeight.toInt())
                 
                 isHidden = true
                 
@@ -193,6 +194,7 @@ class StoryLayout(
                     .moveVerticallyTo(collapsedCoverHeight)
                 Animator(storyContentFrameLayout, context, hidingAnimationDuration)
                     .moveVerticallyTo(collapsedCoverHeight)
+                    .heightTo(-collapsedCoverHeight.toInt())
                 Animator(view, context, hidingAnimationDuration)
                     .increaseScrollYTo(0)
     
@@ -300,6 +302,22 @@ class StoryLayout(
                     duration = this@Animator.duration
                     start()
                 }
+        }
+        
+        fun heightTo(expectingHeightShift: Int) {
+            val valueAnimator =
+                ValueAnimator.ofInt(view.measuredHeight, view.measuredHeight+expectingHeightShift)
+            
+            valueAnimator.apply {
+                addUpdateListener {
+                    val animatedValue = it.animatedValue as Int
+                    view.layoutParams = view.layoutParams.apply {
+                        height = animatedValue
+                    }
+                }
+                duration = this@Animator.duration
+                start()
+            }
         }
     }
 }

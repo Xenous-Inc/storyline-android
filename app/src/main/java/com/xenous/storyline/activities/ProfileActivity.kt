@@ -103,7 +103,7 @@ class ProfileActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 false
             )
-            window.statusBarColor = ContextCompat.getColor(this, R.color.blackTranparentColor)
+            window.statusBarColor = ContextCompat.getColor(this, R.color.blackTransparentColor)
         }
     }
     

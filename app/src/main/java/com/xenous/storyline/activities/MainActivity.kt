@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
                         val storyUrl = it.toString()
                         storyWebView?.apply {
                             this.loadUrl(storyUrl)
-//                            storyLayout.hideCoverOnScroll(this)
+                            storyLayout.hideCoverOnScroll(this)
                         }
                     }
                 }
@@ -405,7 +405,7 @@ class MainActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 false
             )
-            window.statusBarColor = ContextCompat.getColor(this, R.color.blackTranparentColor)
+            window.statusBarColor = ContextCompat.getColor(this, R.color.blackTransparentColor)
         }
     }
 }

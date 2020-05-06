@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.pranavpandey.android.dynamic.toasts.DynamicToast
 import com.xenous.storyline.R
 
 class RegisterActivity : AppCompatActivity() {
@@ -42,23 +43,31 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         createAccountTextView.setOnClickListener {
-            if(isFieldsEmpty()) {
-                Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show()
+            if(passwordEditText.text == repeatPasswordEditText.text) {
+                if(isFieldsEmpty()) {
+                    Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    authentication.createUserWithEmailAndPassword(
+                        emailEditText.text.toString(),
+                        passwordEditText.text.toString()
+                    ).addOnSuccessListener {
+                            Toast.makeText(this, "Регистрация успешно", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this, RegistrationDetailsActivity::class.java))
+                        }.addOnFailureListener {
+                            Log.d(tag, it.message.toString())
+                            Toast.makeText(
+                                this,
+                                "Произошла ошибка при регистрации",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                }
             }
             else {
-                authentication
-                    .createUserWithEmailAndPassword(emailEditText.text.toString(), passwordEditText.text.toString())
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "Регистрация успешно", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this, RegistrationDetailsActivity::class.java))
-                    }
-                    .addOnFailureListener {
-                        Log.d(tag, it.message.toString())
-                        Toast.makeText(this, "Произошла ошибка при регистрации", Toast.LENGTH_SHORT).show()
-                    }
+                DynamicToast.makeWarning(this, getString(R.string.passwords_are_not_same)).show()
             }
         }
-
     }
 
     private fun isFieldsEmpty() : Boolean {

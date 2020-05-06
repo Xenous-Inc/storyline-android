@@ -27,4 +27,6 @@
     <string name="exit_from_account_message">Вы уверены, что хотите выйти из аккаунта?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="user_does_not_interesting">У вас остутсвуют предпочтения</string>
+    <string name="passwords_are_not_same">Пароли не совпадают</string>
 </resources>

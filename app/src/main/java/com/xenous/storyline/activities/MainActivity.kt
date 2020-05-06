@@ -2,6 +2,8 @@ package com.xenous.storyline.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -22,6 +24,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.pranavpandey.android.dynamic.toasts.DynamicToast
 import com.xenous.storyline.R
+import com.xenous.storyline.broadcasts.NotificationBroadcastReceiver
 import com.xenous.storyline.data.CurrentStory
 import com.xenous.storyline.data.Quote
 import com.xenous.storyline.data.Story
@@ -57,6 +60,11 @@ class MainActivity : AppCompatActivity() {
         firebaseUser = FirebaseAuth.getInstance().currentUser
         DownloadUserThread(getOnCompleteDownloadUserHandler()).start()
         makeStatusBarTransparent()
+    
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(this)
+        }
+        startAlarm()
     }
     
     override fun onActionModeStarted(mode: ActionMode) {
@@ -227,6 +235,27 @@ class MainActivity : AppCompatActivity() {
                     .putLong(getString(R.string.preferences_date_of_last_reading), Date().time)
                     .apply()
             }
+        }
+    }
+    
+    private fun startAlarm() {
+        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val pendingIntent: PendingIntent
+    
+        val calendar: Calendar = GregorianCalendar()
+        calendar[Calendar.HOUR_OF_DAY] = 12
+        calendar[Calendar.MINUTE] = 0
+    
+        val myIntent = Intent(this@MainActivity, NotificationBroadcastReceiver::class.java)
+        pendingIntent =
+            PendingIntent.getBroadcast(this, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        manager.cancel(pendingIntent)
+    
+        if(Date().time <= calendar.timeInMillis) {
+            manager[AlarmManager.RTC_WAKEUP, calendar.timeInMillis] = pendingIntent
+        }
+        else {
+            manager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis + MILLIS_IN_DAY, pendingIntent)
         }
     }
     

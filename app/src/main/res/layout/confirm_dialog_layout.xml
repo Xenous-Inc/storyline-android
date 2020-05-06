@@ -17,7 +17,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Текст моего сообщения. Ля-ля-ля. Приложение ебаная хуйня."
             android:textSize="24sp" />
 
         <Space
@@ -35,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Нет"
+                android:visibility="gone"
                 android:textSize="30sp" />
 
             <TextView
@@ -44,7 +43,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Да"
                 android:textSize="30sp" />
         </LinearLayout>
 

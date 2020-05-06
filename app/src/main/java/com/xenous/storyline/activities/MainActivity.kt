@@ -106,6 +106,7 @@ class MainActivity : AppCompatActivity() {
                         if(currentUser!!.interests.isEmpty()) {
                             Log.d(TAG, "User's interests are empty")
                             
+                            DynamicToast.makeWarning(this@MainActivity, getString(R.string.user_does_not_interesting)).show()
                             startActivity(
                                 Intent(
                                     this@MainActivity,

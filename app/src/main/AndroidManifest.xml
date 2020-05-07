@@ -41,6 +41,10 @@
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.RegistrationDetailsActivity" />
         <activity android:name=".activities.ProfileActivity" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

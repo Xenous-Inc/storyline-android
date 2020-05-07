@@ -55,4 +55,7 @@
 
     <!-- Profile Layout -->
     <string name="profile_quotes_title">Мои цитаты</string>
+    <string name="there_are_not_suitable_story_message">К сожалению, на данный момент, истории, подходящие вашим предпочтениям закончились. Желаете ли вы изменить предпочтения или же подождете ближайшего обновления?</string>
+    <string name="change_interests_message">Поменяю интересы</string>
+    <string name="wait">Подожду</string>
 </resources>

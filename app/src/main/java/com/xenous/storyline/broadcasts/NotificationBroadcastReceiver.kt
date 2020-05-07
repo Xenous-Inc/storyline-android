@@ -50,7 +50,7 @@ class NotificationBroadcastReceiver: BroadcastReceiver() {
             .setSmallIcon(R.drawable.ic_launcher_background) //ToDO: Replace for new application icon
             .setWhen(System.currentTimeMillis())
             .setAutoCancel(true).setContentIntent(pendingIntent)
-            .setContentText("Пора повторить слова!").setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentText("Настало время прочесть новую историю!").setPriority(NotificationCompat.PRIORITY_HIGH)
     
         val notificationManagerCompat = NotificationManagerCompat.from(context)
         notificationManagerCompat.notify(200, builder.build())

@@ -156,6 +156,33 @@ class MainActivity : AppCompatActivity() {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             
+            if(msg.what == THERE_ARE_NOT_SUITABLE_STORY) {
+                val storyLineDialog = StoryLineDialog(this@MainActivity)
+                storyLineDialog.messageText = getString(R.string.there_are_not_suitable_story_message)
+                storyLineDialog.positiveText = getString(R.string.change_interests_message)
+                storyLineDialog.setPositiveClickListener(View.OnClickListener {
+                    finish()
+                    
+                    startActivity(
+                        Intent(
+                            this@MainActivity,
+                            RegistrationDetailsActivity::class.java
+                        ).setFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        )
+                    )
+                    
+                    storyLineDialog.cancel()
+                })
+                storyLineDialog.negativeText = getString(R.string.wait)
+                storyLineDialog.setNegativeClickListener(View.OnClickListener {
+                    storyLineDialog.cancel()
+                })
+                storyLineDialog.show()
+                
+                return
+            }
+            
             try {
                 val story = msg.obj as Story
                 this@MainActivity.story = story

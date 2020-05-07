@@ -3,6 +3,7 @@ package com.xenous.storyline.threads
 import android.content.Context
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -19,7 +20,7 @@ class DownloadRecommendedStoryThread(
     private val onCompleteDownloadStoryHandler: Handler
 ) : Thread() {
     companion object {
-        const val TAG = "DownloadRecommendedStoryThread"
+        const val TAG = "DownloadRecommendStoryThread"
     }
     
     override fun run() {
@@ -76,6 +77,8 @@ class DownloadRecommendedStoryThread(
         }
 //        If currentStory doesn't exist, load new book
         else {
+            val storiesIndexesList = mutableListOf<String>()
+            
             Firebase.firestore
                 .collection("books").get()
                 .addOnSuccessListener {querySnapshot ->
@@ -86,6 +89,8 @@ class DownloadRecommendedStoryThread(
                         while(storyDocumentSnapshot == null || story == null) {
                             val storyNumber = Random.nextInt(0, querySnapshot.documents.size)
                             storyDocumentSnapshot = querySnapshot.documents[storyNumber]
+                            
+                            storiesIndexesList.add(storyDocumentSnapshot.id)
                             
                             if(
                                 storyDocumentSnapshot.exists() &&
@@ -103,6 +108,12 @@ class DownloadRecommendedStoryThread(
                                     story = null
                                 }
                             }
+                        }
+                        
+                        if(storiesIndexesList.size == querySnapshot.size()) {
+                            onCompleteDownloadStoryHandler.sendEmptyMessage(
+                                THERE_ARE_NOT_SUITABLE_STORY
+                            )
                         }
                         
                         story.uid = storyDocumentSnapshot.id

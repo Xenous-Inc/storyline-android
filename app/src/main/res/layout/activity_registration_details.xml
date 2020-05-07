@@ -12,7 +12,7 @@
         android:id="@+id/almostReadyTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="serif"
+        android:fontFamily="@font/old_standard_tt"
         android:text="@string/details_title"
         android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
@@ -32,7 +32,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:fontFamily="serif"
+        android:fontFamily="@font/old_standard_tt"
         android:hint="@string/details_name_hint"
         android:inputType="textEmailAddress"
         android:singleLine="true"
@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:fontFamily="serif"
+        android:fontFamily="@font/old_standard_tt"
         android:text="@string/details_interests_title"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:fontFamily="serif"
+            android:fontFamily="@font/old_standard_tt"
             android:text="Русская классическая литература"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
@@ -82,11 +82,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:fontFamily="serif"
+            android:fontFamily="@font/old_standard_tt"
+            android:tag="0"
             android:text="Русская современная литература"
             android:textColor="@android:color/black"
-            android:textSize="24sp"
-            android:tag="0"/>
+            android:textSize="24sp" />
 
         <CheckBox
             android:id="@+id/foreignClassicLiteratureCheckbox"
@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:fontFamily="serif"
+            android:fontFamily="@font/old_standard_tt"
             android:text="Зарубежная классическая литература"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
@@ -105,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:fontFamily="serif"
+            android:fontFamily="@font/old_standard_tt"
             android:text="Зарубежная современная литература"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
@@ -115,7 +115,7 @@
         android:id="@+id/nextTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="serif"
+        android:fontFamily="@font/old_standard_tt"
         android:text="@string/details_next_text"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"

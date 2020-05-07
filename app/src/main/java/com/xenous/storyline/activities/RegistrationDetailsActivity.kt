@@ -58,7 +58,7 @@ class RegistrationDetailsActivity : AppCompatActivity() {
         
         nextTextView.setOnClickListener {view ->
             if(isNameEmpty()) {
-                DynamicToast.makeWarning(this, getString(R.string.not_fully_necessary))
+                DynamicToast.makeWarning(this, getString(R.string.not_fully_necessary)).show()
                 
                 return@setOnClickListener
             }

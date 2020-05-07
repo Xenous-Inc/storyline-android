@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="@font/old_standard_tt"
             android:textSize="20sp" />
 
         <Space
@@ -33,6 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/old_standard_tt"
                 android:gravity="center"
                 android:textSize="22sp"
                 android:visibility="gone" />
@@ -42,6 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/old_standard_tt"
                 android:gravity="center"
                 android:textSize="22sp" />
         </LinearLayout>

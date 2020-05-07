@@ -18,6 +18,10 @@ class DownloadRecommendedStoryThread(
     private val context: Context,
     private val onCompleteDownloadStoryHandler: Handler
 ) : Thread() {
+    companion object {
+        const val TAG = "DownloadRecommendedStoryThread"
+    }
+    
     override fun run() {
         super.run()
         
@@ -33,11 +37,11 @@ class DownloadRecommendedStoryThread(
 //        If currentStory exists, load book from here
         if(
             user.currentStory != null &&
-            user.currentStory.isNotEmpty() &&
-            user.currentStory.creationTime!!.isInSameDay(Date().time)
+            user.currentStory!!.isNotEmpty() &&
+            user.currentStory!!.creationTime!!.isSameDayAs(Date().time)
         ) {
             Firebase.firestore
-                .collection("books").document(user.currentStory.storyUid!!).get()
+                .collection("books").document(user.currentStory!!.storyUid!!).get()
                 .addOnSuccessListener { storyDocument ->
                     if(storyDocument.exists()) {
                         try {
@@ -135,7 +139,7 @@ class DownloadRecommendedStoryThread(
         if(
             currentStoryUid != null &&
             currentStoryCreationTime != PREFERENCE_NOT_FOUND &&
-            currentStoryCreationTime.isInSameDay(Date().time)
+            currentStoryCreationTime.isSameDayAs(Date().time)
         ) {
             Firebase.firestore
                 .collection("books").document(currentStoryUid).get()

@@ -4,5 +4,8 @@ data class CurrentStory(
     val storyUid: String? = null,
     val creationTime: Long? = null
 ) {
-    fun isNotEmpty() = storyUid != null && creationTime != null
+    fun isNotEmpty(): Boolean {
+        return storyUid != null && creationTime != null
+    }
+    
 }

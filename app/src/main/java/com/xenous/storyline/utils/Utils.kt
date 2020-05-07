@@ -36,14 +36,14 @@ fun getTimeInMillisAtZeroHours(timeInMillis: Long): Long {
 }
 
 fun Long.isDayAfter(anotherLong: Long) =
-    getTimeInMillisAtZeroHours(this) - MILLIS_IN_DAY >
+    getTimeInMillisAtZeroHours(this) - MILLIS_IN_DAY >=
             getTimeInMillisAtZeroHours(anotherLong)
 
-fun Long.isDayBefore(anotherLong: Long) =
-    getTimeInMillisAtZeroHours(this) <
-            getTimeInMillisAtZeroHours(anotherLong) - MILLIS_IN_DAY
+fun Long.isTomorrowOf(anotherLong: Long) =
+    getTimeInMillisAtZeroHours(this) ==
+            getTimeInMillisAtZeroHours(anotherLong) + MILLIS_IN_DAY
 
-fun Long.isInSameDay(anotherLong: Long) =
+fun Long.isSameDayAs(anotherLong: Long) =
     getTimeInMillisAtZeroHours(this) ==
             getTimeInMillisAtZeroHours(anotherLong)
 

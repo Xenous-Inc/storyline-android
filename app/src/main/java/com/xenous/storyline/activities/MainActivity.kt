@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("HandlerLeak")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main_new)
         
         firebaseUser = FirebaseAuth.getInstance().currentUser
         DownloadUserThread(getOnCompleteDownloadUserHandler()).start()
@@ -245,6 +245,7 @@ class MainActivity : AppCompatActivity() {
         if(firebaseUser != null && currentUser != null) {
             if(story != null && story!!.uid != null) {
                 val currentStory = CurrentStory(story!!.uid, Date().time)
+                currentUser!!.currentStory = currentStory
                 Firebase.firestore
                     .collection("users")
                     .document(firebaseUser!!.uid)
@@ -285,48 +286,33 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun updateUserStats() {
-    
-        if(currentUser == null) {
-            Log.d(TAG, "UpdateUserStats : Current user is null")
-        
-            return
-        }
-    
-        val isDateAfter = getTimeInMillisAtZeroHours(System.currentTimeMillis()) > currentUser!!.stats["last_date"]!!
-    
-        if(isDateAfter) {
-            Log.d(TAG, "UpdateUserStats : Current user is null")
-        
-            val rating: Long = 0 // ToDO: add rating logic
-            var streak =
-                if(
-                    getTimeInMillisAtZeroHours(System.currentTimeMillis()) - currentUser!!.stats["last_date"]!! > MILLIS_IN_DAY
-                ) { currentUser!!.stats["streak"]!! }
-                else { 0 }
-        
-            streak += 1
-        
-            val newUser = currentUser!!
-            newUser.history.add(story!!.uid!!)
-            newUser.stats = hashMapOf(
-                "last_date" to getTimeInMillisAtZeroHours(System.currentTimeMillis()),
-                "level" to rating,
-                "streak" to streak
-            )
-        
-            Firebase.firestore.collection("users").document(firebaseUser!!.uid)
-                .set(
-                    newUser
-                )
-                .addOnSuccessListener {
-                    Log.d(TAG, "UpdateUserStats : User's info has been updated successfully")
+        if(firebaseUser != null && currentUser != null) {
+            if(
+                currentUser!!.currentStory != null &&
+                currentUser!!.currentStory!!.isNotEmpty() &&
+                !currentUser!!.history.contains(currentUser!!.currentStory!!.storyUid)
+            ) {
+                currentUser!!.history.add(currentUser!!.currentStory!!.storyUid!!)
+                currentUser!!.stats.apply {
+                    this["level"] to 0
+                    if(this["last_date"] != null) {
+                        if(System.currentTimeMillis().isTomorrowOf(this["last_date"]!!)) {
+                            this["streak"] = this["streak"]!! + 1
+                        }
+                        else {
+                            this["streak"] = 1
+                        }
+                    }
+                    this["last_date"] = getTimeInMillisAtZeroHours(System.currentTimeMillis())
                 }
-                .addOnFailureListener { exception ->
-                    Log.d(TAG, "UpdateUserStats : User's info updating has been failed. The cause is ${exception.cause}")
-                }
-                .addOnCanceledListener {
-                    Log.d(TAG, "UpdateUserStats : User's info updating has been canceled")
-                }
+    
+                Firebase.firestore
+                    .collection("users")
+                    .document(firebaseUser!!.uid)
+                    .update(mapOf(
+                            "history" to currentUser!!.history, "stats" to currentUser!!.stats
+                        ))
+            }
         }
     }
     

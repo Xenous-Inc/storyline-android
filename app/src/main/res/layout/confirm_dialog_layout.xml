@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <Space
             android:layout_width="match_parent"
@@ -34,8 +34,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:visibility="gone"
-                android:textSize="30sp" />
+                android:textSize="22sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/confirmYesTextView"
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="30sp" />
+                android:textSize="22sp" />
         </LinearLayout>
 
     </LinearLayout>

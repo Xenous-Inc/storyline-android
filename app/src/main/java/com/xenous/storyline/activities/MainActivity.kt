@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("HandlerLeak")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_new)
+        setContentView(R.layout.activity_main)
         
         firebaseUser = FirebaseAuth.getInstance().currentUser
         DownloadUserThread(getOnCompleteDownloadUserHandler()).start()
@@ -400,7 +400,12 @@ class MainActivity : AppCompatActivity() {
                     
                     when(menuItem.itemId) {
                         R.id.addToQuotesItem -> if(story != null) {
-                            addQuoteToDatabase(story!!, quoteText)
+                            addQuoteToDatabase(
+                                story!!,
+                                quoteText
+                                    .replace("\n", "")
+                                    .replace("/n", "")
+                            )
                         }
                         R.id.copyItem        -> Quote(text = quoteText).copyToClipBoard(this)
                         R.id.shareItem       -> if(story != null) {

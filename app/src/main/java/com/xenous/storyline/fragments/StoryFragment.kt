@@ -12,7 +12,13 @@ import androidx.fragment.app.Fragment
 import com.xenous.storyline.R
 
 
-class StoryFragment(val onViewLoadedHandler: Handler) : Fragment() {
+class StoryFragment() : Fragment() {
+    
+    private var onViewLoadedHandler: Handler? = null
+    
+    constructor(onViewLoadedHandler: Handler) : this() {
+        this.onViewLoadedHandler = onViewLoadedHandler
+    }
     
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,7 +36,7 @@ class StoryFragment(val onViewLoadedHandler: Handler) : Fragment() {
         
         val msg = Message.obtain()
         msg.obj = storyWebView
-        onViewLoadedHandler.sendMessage(msg)
+        onViewLoadedHandler?.sendMessage(msg)
         
         storyWebView.isLongClickable = false
         storyWebView.settings.javaScriptEnabled = true

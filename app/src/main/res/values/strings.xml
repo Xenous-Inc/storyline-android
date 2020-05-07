@@ -29,4 +29,30 @@
     <string name="no">Нет</string>
     <string name="user_does_not_interesting">У вас остутсвуют предпочтения</string>
     <string name="passwords_are_not_same">Пароли не совпадают</string>
+
+    <!-- Login Layout -->
+    <string name="login_title">Вход</string>
+    <string name="login_email_hint">E-mail</string>
+    <string name="login_password_hint">Пароль</string>
+    <string name="login_sign_in_text">Войти</string>
+    <string name="login_create_account_hint">Нет аккаунта?</string>
+    <string name="login_create_account_text">Зарегитрироваться</string>
+
+    <!-- Register Layout -->
+    <string name="register_title">Регистрация</string>
+    <string name="register_email_hint">E-mail</string>
+    <string name="register_password_hint">Пароль</string>
+    <string name="register_repeat_password_hint">Повторите пароль</string>
+    <string name="register_create_account_text">Создать аккаунт</string>
+    <string name="register_create_account_hint">Уже есть аккаунт?</string>
+    <string name="register_sign_in_text">Войти</string>
+
+    <!-- Registration Details Layout -->
+    <string name="details_title">Почти готово...</string>
+    <string name="details_name_hint">Как вас зовут?</string>
+    <string name="details_interests_title">Что вам интересно?</string>
+    <string name="details_next_text">Далее</string>
+
+    <!-- Profile Layout -->
+    <string name="profile_quotes_title">Мои цитаты</string>
 </resources>

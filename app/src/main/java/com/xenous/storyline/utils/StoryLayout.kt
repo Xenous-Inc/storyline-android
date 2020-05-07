@@ -96,6 +96,8 @@ class StoryLayout(
                 view.findViewById<FrameLayout>(R.id.storyContentFrameLayout)
             val coverSubtitleLinearLayout =
                 view.findViewById<LinearLayout>(R.id.storyCoverSubtitleLinearLayout)
+            val coverArrowImageView =
+                view.findViewById<ImageView>(R.id.storyCoverArrowImageView)
 
             val coverHeightInPx = cover.measuredHeight.toFloat()
             val coverWidthInPx = cover.measuredWidth.toFloat()
@@ -140,6 +142,9 @@ class StoryLayout(
                     .moveVerticallyTo(-coverVerticalShift)
 
                 Animator(coverSubtitleLinearLayout, context, collapsingAnimationDuration/2)
+                    .setAlphaTo(0F)
+                
+                Animator(coverArrowImageView, context, collapsingAnimationDuration)
                     .setAlphaTo(0F)
             }
 

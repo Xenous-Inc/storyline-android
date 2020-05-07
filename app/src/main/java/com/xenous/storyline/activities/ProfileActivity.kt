@@ -9,9 +9,7 @@ import android.os.Handler
 import android.os.Message
 import android.util.Log
 import android.view.*
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -132,6 +130,10 @@ class ProfileActivity : AppCompatActivity() {
                     SUCCESS_CODE -> run<Handler, Unit> {
                         
                         val quotesList = downloadQuotesThread.quotesList
+                        findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
+                        if(quotesList.isEmpty()) {
+                            findViewById<LinearLayout>(R.id.noQuotesLinearLayout).visibility = View.VISIBLE
+                        }
                         quotesRecyclerView.adapter = QuotesRecyclerViewAdapter(this@ProfileActivity, quotesList)
                         quotesRecyclerView.layoutManager = LinearLayoutManager(this@ProfileActivity)
                     }
@@ -255,11 +257,15 @@ class QuotesRecyclerViewAdapter(
                     SUCCESS_CODE -> {
                         quotesList.removeAt(quotePosition)
                         this@QuotesRecyclerViewAdapter.notifyDataSetChanged()
-                        
                         DynamicToast.makeSuccess(
                             activity,
                             activity.getString(R.string.removing_quote_success)
                         ).show()
+                        
+                        if(quotesList.isEmpty()) {
+                            activity.findViewById<LinearLayout>(R.id.noQuotesLinearLayout)
+                                .visibility = View.VISIBLE
+                        }
                     }
                     ERROR_CODE -> {
                         DynamicToast.makeError(

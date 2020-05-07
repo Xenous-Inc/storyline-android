@@ -61,6 +61,7 @@
                 android:shadowDx="5"
                 android:shadowDy="5"
                 android:shadowRadius="5"
+                android:text="@string/story_title"
                 android:textColor="@android:color/white"
                 android:textSize="30sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -107,6 +108,18 @@
                     android:textColor="@android:color/white"
                     android:textSize="18sp" />
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/storyCoverArrowImageView"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="48dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toBottomOf="@+id/storyCoverImageView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/arrow_down" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -230,7 +230,7 @@ class MainActivity : AppCompatActivity() {
         val storyFragment = StoryFragment(getOnCompleteLoadStoryFragment(story, storyLayout))
         storyLayout.apply {
             coverTitleVerticalBias = 0.4F
-            setCoverImageResource(R.drawable.profile_header_six)
+            setCoverImageResource(R.drawable.book_cover)
             setContentFragment(storyFragment, supportFragmentManager)
             actionButton.setImageResource(
                 if(firebaseUser != null) {
@@ -399,7 +399,6 @@ class MainActivity : AppCompatActivity() {
         menuItems.setOnMenuItemClickListener {menuItem ->
             storyWebView
                 ?.evaluateJavascript("window.getSelection().toString()") {value ->
-                    
                     var quoteText = value
                     quoteText = quoteText.replace("\"", "")
                     quoteText = quoteText.replace("\n", "")
@@ -440,7 +439,6 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-            
             actionMode?.finish()
             
             true

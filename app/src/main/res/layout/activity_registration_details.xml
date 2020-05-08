@@ -53,8 +53,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
 
-    <LinearLayout
-        android:id="@+id/interestsLinearLayout"
+    <ScrollView
+        android:id="@+id/interestsScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
@@ -65,51 +65,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/whatInterestingTextView">
 
-        <CheckBox
-            android:id="@+id/russianClassicLiteratureCheckbox"
+        <LinearLayout
+            android:id="@+id/interestsLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="@font/old_standard_tt"
-            android:text="Русская классическая литература"
-            android:textColor="@android:color/black"
-            android:textSize="24sp" />
+            android:orientation="vertical">
 
-        <CheckBox
-            android:id="@+id/russianModernLiteratureCheckbox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="@font/old_standard_tt"
-            android:tag="0"
-            android:text="Русская современная литература"
-            android:textColor="@android:color/black"
-            android:textSize="24sp" />
+            <CheckBox
+                android:id="@+id/russianClassicLiteratureCheckbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:fontFamily="@font/old_standard_tt"
+                android:text="Русская классическая литература"
+                android:textColor="@android:color/black"
+                android:textSize="24sp" />
 
-        <CheckBox
-            android:id="@+id/foreignClassicLiteratureCheckbox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="@font/old_standard_tt"
-            android:text="Зарубежная классическая литература"
-            android:textColor="@android:color/black"
-            android:textSize="24sp" />
+            <CheckBox
+                android:id="@+id/russianModernLiteratureCheckbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:fontFamily="@font/old_standard_tt"
+                android:tag="0"
+                android:text="Русская современная литература"
+                android:textColor="@android:color/black"
+                android:textSize="24sp" />
 
-        <CheckBox
-            android:id="@+id/foreignModernLiteratureCheckbox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="@font/old_standard_tt"
-            android:text="Зарубежная современная литература"
-            android:textColor="@android:color/black"
-            android:textSize="24sp" />
-    </LinearLayout>
+            <CheckBox
+                android:id="@+id/foreignClassicLiteratureCheckbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:fontFamily="@font/old_standard_tt"
+                android:text="Зарубежная классическая литература"
+                android:textColor="@android:color/black"
+                android:textSize="24sp" />
+
+            <CheckBox
+                android:id="@+id/foreignModernLiteratureCheckbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:fontFamily="@font/old_standard_tt"
+                android:text="Зарубежная современная литература"
+                android:textColor="@android:color/black"
+                android:textSize="24sp" />
+        </LinearLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/nextTextView"

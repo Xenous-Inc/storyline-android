@@ -45,7 +45,7 @@ class RegistrationDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_registration_details)
         
         nameEditText = findViewById(R.id.nameEditText)
-        interestsLinearLayout = findViewById(R.id.interestsScrollView)
+        interestsLinearLayout = findViewById(R.id.interestsLinearLayout)
         nextTextView = findViewById(R.id.nextTextView)
         russianClassicalLiteratureCheckBox = findViewById(R.id.russianClassicLiteratureCheckbox)
         russianModernLiteratureCheckbox = findViewById(R.id.russianModernLiteratureCheckbox)
